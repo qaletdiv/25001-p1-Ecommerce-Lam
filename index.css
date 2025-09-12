@@ -1,0 +1,149 @@
+a {
+  text-decoration: none;
+}
+
+.main-content {
+  width: 100%;
+  max-width: 1170px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 16px;
+}
+
+/* header */
+.header-fixed .body-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  width: 45px;
+}
+.navbar {
+  margin-left: auto;
+}
+.navbar ul {
+  display: flex;
+}
+
+.navbar a {
+  position: relative;
+  color: gray;
+  font-size: 16px;
+  padding: 8px 21px;
+}
+
+.navbar li.active a,
+.navbar a:hover {
+  color: black;
+  /* font-weight: 600; */
+  text-shadow: 1px 0 0 currentColor;
+}
+
+.navbar li.active a::after {
+  position: absolute;
+  left: 21px;
+  bottom: 6px;
+  display: block;
+  content: "";
+  width: 12px;
+  height: 2px;
+  border-radius: 1px;
+  background: currentColor;
+}
+
+.nav-menu {
+  list-style: none;
+  display: flex;
+  gap: 16px;
+  padding: 0;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
+form {
+  background-color: white;
+  padding: 30px 25px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  max-height: 600px;
+  overflow-y: auto;
+  background-color: rgba(61, 137, 40, 0.438);
+}
+
+form h2 {
+  text-align: center;
+  color: #006442;
+  margin-bottom: 20px;
+}
+
+/* INPUTS */
+form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+form input:focus {
+  outline: none;
+  border-color: #006442;
+}
+
+/* BUTTON */
+form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #006442;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+form button:hover {
+  background-color: #004e32;
+}
+
+/* LINK chuyển đổi */
+form p {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 14px;
+}
+
+form p a {
+  color: #006442;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+form p a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+/ @media screen and (max-width: 480px) {
+  form.form {
+    padding: 25px 20px;
+  }
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
+  /* Canh giữa màn hình */
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  min-height: 100vh;
+}
