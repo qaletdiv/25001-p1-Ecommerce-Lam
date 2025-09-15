@@ -1,13 +1,20 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
 a {
   text-decoration: none;
 }
 
 .main-content {
   width: 100%;
-  max-width: 1170px;
+  max-width: 1280px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 16px;
+}
+.header-fixed {
+  width: 100%;
 }
 
 /* header */
@@ -16,10 +23,13 @@ a {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  background-color: rgb(229, 236, 200);
 }
 
 .logo {
   width: 45px;
+  height: auto;
+  margin-right: 12px;
 }
 .navbar {
   margin-left: auto;
@@ -37,7 +47,7 @@ a {
 
 .navbar li.active a,
 .navbar a:hover {
-  color: black;
+  color: #5d8e20;
   /* font-weight: 600; */
   text-shadow: 1px 0 0 currentColor;
 }
@@ -72,12 +82,12 @@ form {
   max-width: 400px;
   max-height: 600px;
   overflow-y: auto;
-  background-color: rgba(61, 137, 40, 0.438);
+  background-color: rgb(229, 236, 200);
 }
 
 form h2 {
   text-align: center;
-  color: #006442;
+  color: #5d8e20;
   margin-bottom: 20px;
 }
 
@@ -90,18 +100,20 @@ form input {
   border-radius: 6px;
   font-size: 14px;
   transition: border-color 0.2s;
+  margin-bottom: 15px;
+  box-sizing: border-box;
 }
 
 form input:focus {
   outline: none;
-  border-color: #006442;
+  border-color: #29560d;
 }
 
 /* BUTTON */
 form button {
   width: 100%;
   padding: 12px;
-  background-color: #006442;
+  background-color: #5d8e20;
   color: white;
   border: none;
   border-radius: 6px;
@@ -111,7 +123,7 @@ form button {
 }
 
 form button:hover {
-  background-color: #004e32;
+  background-color: #29560d;
 }
 
 /* LINK chuyển đổi */
@@ -122,7 +134,7 @@ form p {
 }
 
 form p a {
-  color: #006442;
+  color: #5d8e20;
   text-decoration: none;
   font-weight: 500;
 }
@@ -132,8 +144,8 @@ form p a:hover {
 }
 
 /* Responsive */
-/ @media screen and (max-width: 480px) {
-  form.form {
+@media screen and (max-width: 480px) {
+  form {
     padding: 25px 20px;
   }
 }
@@ -141,9 +153,65 @@ form p a:hover {
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f4f4f4;
-  /* Canh giữa màn hình */
   display: flex;
-  justify-content: center;
-  /* align-items: center; */
+  align-items: center;
   min-height: 100vh;
+  flex-direction: column;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-bar input {
+  flex-grow: 1;
+  padding: 8px 10px;
+  font-size: 16px;
+  border: 1.5px solid white;
+  border-radius: 6px;
+  outline: none;
+}
+
+.search-btn {
+  background-color: white;
+  border: 1px solid white;
+  border-radius: 50px;
+  padding: 6px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.search-btn:hover {
+  background-color: #5d8e20;
+}
+
+.product-list {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.title-product {
+  text-align: center;
+}
+
+.product-btn {
+  color: gray;
+  background-color: #cacdc6;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.product-btn:hover {
+  background-color: #a4d469;
+  cursor: pointer;
 }
