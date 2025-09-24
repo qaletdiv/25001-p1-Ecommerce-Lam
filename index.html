@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ji-ho Shouta</title>
-    <script src="index.js" type="module" defer></script>
-    <link rel="stylesheet" href="index.css" />
+    <script src="js/main.js" type="module" defer></script>
+    <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
     <header class="header-fixed">
@@ -17,14 +17,33 @@
           <nav class="navbar">
             <ul class="nav-menu">
               <li class="active"><a href="#!"> Trang chủ</a></li>
-              <li><a href="#!">Sản phẩm</a></li>
+              <li><a href="products.html">Sản phẩm</a></li>
               <li><a href="#!">Liên hệ</a></li>
-              <li><a href="loginForm.html">Đăng nhập</a></li>
-              <li><a href="cart.html">🛒</a></li>
+              <li><a href="login.html">Đăng nhập</a></li>
+              <li>
+                <a href="cart.html" class="cart-link"
+                  >🛒
+                  <span
+                    id="cart-count"
+                    style="
+                      background: red;
+                      color: white;
+                      font-size: 12px;
+                      padding: 2px 6px;
+                      border-radius: 50%;
+                      position: relative;
+                      top: -10px;
+                      left: -5px;
+                      display: none;
+                    "
+                    >0</span
+                  >
+                </a>
+              </li>
             </ul>
           </nav>
           <div class="search-bar">
-            <input type="text" id="searheInput" placeholder="Tìm sản phẩm..." />
+            <input type="text" id="searchInput" placeholder="Tìm sản phẩm..." />
             <button
               onclick="searchProducts()"
               class="search-btn"
@@ -55,8 +74,12 @@
           height="384px"
         />
       </div>
+      <h2>Sản phẩm nổi bật</h2>
+      <div id="featured-products" class="product-grid"></div>
     </main>
     <section class="main-product"></section>
+    <footer>
+      <p>&copy; 2025 Ji-ho Shouta - All rights reserved.</p>
+    </footer>
   </body>
-  <footer></footer>
 </html>

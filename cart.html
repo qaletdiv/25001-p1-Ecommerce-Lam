@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giỏ hàng</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f9f9f9;
+      }
+
+      h1 {
+        text-align: center;
+        margin-top: 30px;
+        color: #116c08;
+      }
+
+      #cart-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .cart-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        padding: 20px 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .cart-item:last-child {
+        border-bottom: none;
+      }
+
+      .cart-item img {
+        width: 200px;
+        height: auto;
+        object-fit: cover;
+        border-radius: 8px;
+        flex-shrink: 0;
+      }
+
+      .cart-item h3 {
+        margin: 0 0 6px;
+        font-size: 16px;
+        color: #333;
+      }
+
+      .cart-item p {
+        margin: 6px 0;
+        font-size: 14px;
+        color: #555;
+      }
+
+      .quantity-input {
+        width: 50px;
+        padding: 4px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      .remove-btn {
+        margin-top: 10px;
+        background: #f44336;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+
+      .remove-btn:hover {
+        background: #d32f2f;
+      }
+
+      #cart-container h3 {
+        text-align: right;
+        margin-top: 6px;
+        font-size: 18px;
+        color: #111;
+        border-top: 1px solid #ddd;
+        padding-top: 15px;
+      }
+
+      @media (max-width: 600px) {
+        .cart-item {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .cart-item img {
+          width: 100px;
+          height: 100px;
+        }
+
+        .cart-item div {
+          width: 100%;
+        }
+
+        #cart-container h3 {
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Giỏ hàng của bạn 🛒</h1>
+    <div id="cart-container"></div>
+
+    <script type="module" src="./js/cart.js"></script>
+  </body>
+</html>
