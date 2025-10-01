@@ -1,17 +1,23 @@
-/* Reset margin và padding cho tất cả */
+/* ======================== */
+/* RESET & CƠ BẢN TOÀN TRANG */
+/* ======================== */
+
+/* Reset margin, padding và thiết lập box-sizing */
 *,
 *::before,
 *::after {
   margin: 0;
   padding: 0;
-  box-sizing: border-box; /* Thêm box-sizing cho tất cả */
+  box-sizing: border-box;
 }
 
+/* Gỡ bỏ gạch dưới cho liên kết */
 a {
   text-decoration: none;
   color: inherit;
 }
 
+/* Giới hạn chiều rộng nội dung */
 .main-content {
   width: 100%;
   max-width: 1280px;
@@ -19,11 +25,24 @@ a {
   margin-right: auto;
 }
 
+/* Thiết lập body mặc định */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+/* ======================== */
+/* HEADER & NAVIGATION     */
+/* ======================== */
+
 .header-fixed {
   width: 100%;
 }
 
-/* header */
 .header-fixed .body-header {
   display: flex;
   flex-wrap: wrap;
@@ -68,7 +87,6 @@ a {
   position: absolute;
   left: 16px;
   bottom: 6px;
-  display: block;
   content: "";
   width: 12px;
   height: 2px;
@@ -85,14 +103,9 @@ a {
   flex-wrap: wrap;
 }
 
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f4f4;
-  display: flex;
-  align-items: center;
-  min-height: 100vh;
-  flex-direction: column;
-}
+/* ======================== */
+/* DANH SÁCH SẢN PHẨM       */
+/* ======================== */
 
 .product-list {
   display: flex;
@@ -106,6 +119,10 @@ body {
   text-align: center;
   margin: 30px 0 10px;
 }
+
+/* ======================== */
+/* NÚT DÙNG CHUNG           */
+/* ======================== */
 
 .product-btn {
   background-color: #5d8e20;
@@ -125,7 +142,10 @@ body {
   background-color: #3b5f10;
 }
 
-/* Chi tiết sản phẩm */
+/* ======================== */
+/* CHI TIẾT SẢN PHẨM        */
+/* ======================== */
+
 .product-detail-container {
   max-width: 960px;
   margin: 0 auto 40px;
@@ -180,7 +200,10 @@ body {
   margin-bottom: 16px;
 }
 
-/* Gợi ý sản phẩm */
+/* ======================== */
+/* GỢI Ý SẢN PHẨM           */
+/* ======================== */
+
 #related-products {
   display: flex;
   flex-wrap: wrap;
@@ -232,10 +255,12 @@ body {
 
 .product-card .product-btn:hover {
   background-color: #2f5b0b;
-  text-decoration: none;
 }
 
-/* Responsive */
+/* ======================== */
+/* RESPONSIVE MOBILE        */
+/* ======================== */
+
 @media (max-width: 768px) {
   .product-detail {
     flex-direction: column;
@@ -250,4 +275,248 @@ body {
   .detail-info {
     padding: 20px;
   }
+}
+
+/* ======================== */
+/* FORM ĐĂNG NHẬP / ĐĂNG KÝ */
+/* ======================== */
+#login-btn:hover {
+  cursor: pointer;
+  color: #5d8e20;
+}
+
+.form {
+  width: 100%;
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 32px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form h2 {
+  text-align: center;
+  font-size: 24px;
+  color: #5d8e20;
+  margin-bottom: 8px;
+}
+
+.form label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.form input {
+  padding: 10px 14px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.form input:focus {
+  border-color: #5d8e20;
+}
+
+.form button {
+  background-color: #5d8e20;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form button:hover {
+  background-color: #3b5f10;
+}
+
+.form p {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.form a {
+  color: #5d8e20;
+  font-weight: 500;
+}
+
+.form a:hover {
+  text-decoration: underline;
+}
+
+/* FORM CHECKOUT */
+.checkout-container {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.checkout-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #2a2a2a;
+}
+
+.checkout-form .form-section {
+  margin-bottom: 25px;
+}
+
+.checkout-form h3 {
+  margin-bottom: 15px;
+  color: #5d8e20;
+  border-bottom: 2px solid #5d8e20;
+  padding-bottom: 5px;
+  font-weight: 600;
+}
+
+.checkout-form input[type="text"],
+.checkout-form input[type="email"],
+.checkout-form input[type="tel"] {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1.5px solid #5d8e20;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-top: 8px;
+  outline-offset: 2px;
+  transition: border-color 0.3s ease;
+}
+
+.checkout-form input[type="text"]:focus,
+.checkout-form input[type="email"]:focus,
+.checkout-form input[type="tel"]:focus {
+  border-color: #417d0d;
+  box-shadow: 0 0 6px #a3cf72;
+}
+
+.checkout-form label {
+  display: block;
+  margin: 12px 0 8px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+}
+
+.checkout-form input[type="radio"] {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.order-summary {
+  background: #f8f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: inset 0 0 5px rgb(0 0 0 / 0.05);
+}
+
+.order-summary h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #4b7c18;
+  font-weight: 600;
+}
+
+.summary-item,
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.summary-total {
+  font-weight: 700;
+  font-size: 18px;
+  border-top: 2px solid #5d8e20;
+  padding-top: 12px;
+  margin-top: 10px;
+}
+
+.checkout-btn {
+  width: 100%;
+  background-color: #5d8e20;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.checkout-btn:hover {
+  background-color: #417d0d;
+}
+
+.success-message {
+  margin-top: 15px;
+  color: #217a00;
+  font-weight: 600;
+  text-align: center;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content h2 {
+  text-align: center;
+  color: #5d8e20;
+  margin-bottom: 20px;
+}
+
+.modal-content label {
+  font-weight: 600;
+  margin-top: 10px;
+  display: block;
+  color: #333;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 10px 14px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.modal-content input[type="radio"] {
+  width: auto;
 }

@@ -1,168 +1,136 @@
 import { products } from "./mock-data.js";
 
-/**
- * 1. Lấy ID sản phẩm từ URL query string (?id=xxx)
- */
-function getProductIdFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("id");
-}
-
-/**
- * 2. Tìm sản phẩm trong dữ liệu theo ID
- * @param {string} id
- * @returns sản phẩm hoặc null nếu không tìm thấy
- */
 function getProductById(id) {
   for (const category of products) {
-    const product = category.list.find((item) => item.id === id);
-    if (product) {
-      // Trả về đối tượng sản phẩm kèm category để dùng hiển thị hoặc lọc
-      return { ...product, category: category.category };
-    }
+    const product = category.list.find((p) => String(p.id) === String(id));
+    if (product) return { product, category };
   }
   return null;
 }
 
-/**
- * 3. Hiển thị chi tiết sản phẩm lên phần tử có id="product-detail"
- * @param {object} product
- */
-function renderProductDetail(product) {
+// Hàm thêm sản phẩm vào giỏ hàng
+window.addToCart = function (productId) {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const existing = cart.find((item) => String(item.id) === String(productId));
+  if (existing) {
+    existing.quantity++;
+  } else {
+    cart.push({ id: productId, quantity: 1 });
+  }
+  localStorage.setItem("cart", JSON.stringify(cart));
+  showToast("Đã thêm sản phẩm vào giỏ hàng");
+};
+
+function renderProductDetail() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
   const container = document.getElementById("product-detail");
-  if (!container) return;
+  if (!id) {
+    container.textContent = "Sản phẩm không tồn tại.";
+    return;
+  }
+
+  const result = getProductById(id);
+
+  if (!result) {
+    container.textContent = "Sản phẩm không tồn tại.";
+    return;
+  }
+
+  const { product, category } = result;
 
   container.innerHTML = `
-    <div class="product-detail">
-      <img src="${product.img}" alt="${product.name}" class="detail-img"/>
-      <div class="detail-info">
+    <div class="product-detail-card">
+      <img src="${product.img}" alt="${
+    product.name
+  }" width="400" height="350" />
+      <div class="product-detail-info">
         <h2>${product.name}</h2>
-        <p>Giá: ${product.price.toLocaleString("vi-VN", {
+        <p class="price">${product.price.toLocaleString("vi-VN", {
           style: "currency",
           currency: "VND",
         })}</p>
-        <p>Mô tả: ${product.description || "Đang cập nhật..."}</p>
-        <!-- Nút Thêm vào giỏ hàng dùng onclick trực tiếp gọi hàm addToCart -->
-        <button class="product-btn" onclick="addToCart('${
-          product.id
-        }')">Thêm vào giỏ</button>
+        <p class="description">${
+          product.description || "Chưa có mô tả cho sản phẩm này."
+        }</p>
+        <button class="product-btn" id="add-to-cart-btn" aria-label="Thêm sản phẩm vào giỏ">Thêm vào giỏ</button>
       </div>
     </div>
   `;
+
+  document.getElementById("add-to-cart-btn").addEventListener("click", () => {
+    addToCart(product.id);
+  });
+
+  renderRelatedProducts(category.list, product.id);
 }
 
-/**
- * 4. Hiển thị sản phẩm liên quan (cùng danh mục) tối đa 4 sản phẩm,
- * loại trừ sản phẩm hiện tại (excludeId)
- * @param {string} category - tên danh mục
- * @param {string} excludeId - ID sản phẩm hiện tại để không hiển thị lại
- */
-function renderRelatedProducts(category, excludeId) {
+function renderRelatedProducts(productList, currentProductId) {
   const container = document.getElementById("related-products");
-  if (!container) return;
+  container.innerHTML = "";
 
-  container.innerHTML = ""; // Xóa nội dung cũ nếu có
+  const related = productList
+    .filter((p) => String(p.id) !== String(currentProductId))
+    .slice(0, 4);
 
-  // Tìm danh mục sản phẩm
-  const currentCategory = products.find((cat) => cat.category === category);
-
-  if (!currentCategory) return;
-
-  // Lọc sản phẩm khác ID hiện tại, lấy tối đa 4 sản phẩm
-  currentCategory.list
-    .filter((p) => p.id !== excludeId)
-    .slice(0, 4)
-    .forEach((product) => {
-      // Tạo thẻ div cho mỗi sản phẩm liên quan
-      const card = document.createElement("div");
-      card.className = "product-card";
-      card.innerHTML = `
-        <img src="${product.img}" alt="${product.name}" />
-        <h3>${product.name}</h3>
-        <p>${product.price.toLocaleString("vi-VN", {
-          style: "currency",
-          currency: "VND",
-        })}</p>
-        <!-- Link tới chi tiết sản phẩm -->
-        <a class="product-btn" href="product-detail.html?id=${
-          product.id
-        }">Xem chi tiết</a>
-      `;
-      container.appendChild(card);
-    });
-}
-
-/**
- * 5. Hàm thêm sản phẩm vào giỏ hàng,
- * lưu vào localStorage dưới key "cart" (mảng {id, quantity})
- * Nếu đã có thì tăng số lượng
- * @param {string} productId
- */
-window.addToCart = function (productId) {
-  // Lấy giỏ hàng hiện tại từ localStorage hoặc tạo mới mảng rỗng
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-  // Kiểm tra sản phẩm đã có trong giỏ chưa
-  const existing = cart.find((item) => item.id === productId);
-
-  if (existing) {
-    existing.quantity++; // Tăng số lượng nếu đã có
-  } else {
-    cart.push({ id: productId, quantity: 1 }); // Thêm mới nếu chưa có
+  if (related.length === 0) {
+    container.innerHTML = "<p>Không có sản phẩm liên quan.</p>";
+    return;
   }
 
-  // Lưu giỏ hàng cập nhật lại vào localStorage
-  localStorage.setItem("cart", JSON.stringify(cart));
+  const grid = document.createElement("div");
+  grid.className = "product-grid";
 
-  // Hiển thị thông báo thêm thành công
-  showAddNotification();
-};
+  related.forEach((product) => {
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+      <img src="${product.img}" alt="${
+      product.name
+    }" width="280" height="250" />
+      <h3>${product.name}</h3>
+      <p>${product.price.toLocaleString("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      })}</p>
+      <div class="actions">
+        <a href="product-detail.html?id=${
+          product.id
+        }" class="product-btn" aria-label="Xem chi tiết ${
+      product.name
+    }">Xem chi tiết</a>
+        <button class="product-btn" aria-label="Thêm ${
+          product.name
+        } vào giỏ" onclick="addToCart('${product.id}')">Thêm vào giỏ</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
 
-/**
- * 6. Hiển thị thông báo dạng toast (popup nhỏ) khi thêm sản phẩm vào giỏ hàng
- */
-function showAddNotification() {
+  container.appendChild(grid);
+}
+
+function showToast(message) {
+  let container = document.getElementById("toast-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "toast-container";
+    container.style.position = "fixed";
+    container.style.bottom = "20px";
+    container.style.right = "20px";
+    container.style.zIndex = "9999";
+    document.body.appendChild(container);
+  }
+
   const toast = document.createElement("div");
   toast.className = "toast";
-  toast.textContent = "Đã thêm sản phẩm vào giỏ hàng!";
-
-  // Lấy container chứa toast, nếu chưa có thì tạo mới
-  const container =
-    document.getElementById("toast-container") || createToastContainer();
-
+  toast.textContent = message;
   container.appendChild(toast);
 
-  // Tự động xóa toast sau 3 giây
-  setTimeout(() => toast.remove(), 3000);
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
 }
 
-/**
- * Tạo container chứa toast nếu chưa có trong DOM
- * @returns {HTMLElement} container mới tạo
- */
-function createToastContainer() {
-  const container = document.createElement("div");
-  container.id = "toast-container";
-  document.body.appendChild(container);
-  return container;
-}
-
-/**
- * 7. Chạy chương trình:
- * - Lấy ID sản phẩm từ URL
- * - Tìm sản phẩm trong dữ liệu
- * - Nếu có sản phẩm, hiển thị chi tiết và sản phẩm liên quan
- * - Nếu không, hiển thị thông báo không tìm thấy
- */
-const productId = getProductIdFromURL();
-const product = getProductById(productId);
-
-if (product) {
-  renderProductDetail(product);
-  renderRelatedProducts(product.category, product.id);
-} else {
-  const container = document.getElementById("product-detail");
-  if (container) {
-    container.innerHTML = "<p>Sản phẩm không tồn tại.</p>";
-  }
-}
+document.addEventListener("DOMContentLoaded", renderProductDetail);

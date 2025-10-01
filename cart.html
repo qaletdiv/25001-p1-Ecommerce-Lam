@@ -111,12 +111,62 @@
           text-align: center;
         }
       }
+
+      /* Toast styles */
+      #toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+      }
+
+      .toast {
+        background: #333;
+        color: #fff;
+        padding: 12px 20px;
+        margin-top: 10px;
+        border-radius: 6px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        opacity: 0.9;
+        animation: fadein 0.3s, fadeout 0.5s 2.5s;
+      }
+
+      @keyframes fadein {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 0.9;
+        }
+      }
+
+      @keyframes fadeout {
+        from {
+          opacity: 0.9;
+        }
+        to {
+          opacity: 0;
+        }
+      }
     </style>
   </head>
   <body>
     <h1>Giỏ hàng của bạn 🛒</h1>
     <div id="cart-container"></div>
+    <div id="toast-container"></div>
 
+    <!-- ✅ Kiểm tra đăng nhập trước khi tải cart.js -->
+    <script>
+      // Kiểm tra user hiện tại từ localStorage
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+      if (!currentUser) {
+        // Chưa đăng nhập → chuyển hướng đến trang đăng nhập, kèm query để quay lại
+        window.location.href = "login.html?redirect=cart.html";
+      }
+    </script>
+
+    <!-- ✅ Sau khi xác minh đăng nhập, mới load logic giỏ hàng -->
     <script type="module" src="./js/cart.js"></script>
   </body>
 </html>

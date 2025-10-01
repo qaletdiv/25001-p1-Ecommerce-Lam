@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thanh toán đơn hàng</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="header-fixed">
+      <div class="body-header main-content">
+        <img src="img/logo.png" class="logo" alt="Logo" />
+        <nav class="navbar">
+          <ul class="nav-menu">
+            <li><a href="index.html">Trang chủ</a></li>
+            <li><a href="products.html">Sản phẩm</a></li>
+            <li><a href="cart.html">Giỏ hàng</a></li>
+            <li><a href="login.html">Đăng nhập</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="checkout-container">
+        <h2>Thanh toán đơn hàng</h2>
+        <form class="checkout-form" id="checkout-form">
+          <div class="form-section">
+            <h3>Thông tin khách hàng</h3>
+            <input
+              type="text"
+              id="input-name"
+              name="name"
+              placeholder="Họ và tên"
+              required
+            />
+            <input
+              type="email"
+              id="input-email"
+              name="email"
+              placeholder="Email"
+              required
+            />
+            <input
+              type="text"
+              id="input-phone"
+              name="phone"
+              placeholder="Số điện thoại"
+              required
+            />
+            <input
+              type="text"
+              id="input-address"
+              name="address"
+              placeholder="Địa chỉ giao hàng"
+              required
+            />
+          </div>
+
+          <div class="form-section">
+            <h3>Phương thức thanh toán</h3>
+            <label
+              ><input type="radio" name="payment" value="COD" checked /> Thanh
+              toán khi nhận hàng (COD)</label
+            >
+            <label
+              ><input type="radio" name="payment" value="Bank" /> Chuyển khoản
+              ngân hàng</label
+            >
+            <label
+              ><input type="radio" name="payment" value="E-Wallet" /> Ví điện tử
+              (Momo, ZaloPay...)</label
+            >
+          </div>
+
+          <div class="order-summary">
+            <h3>Tóm tắt đơn hàng</h3>
+            <div class="summary-item">
+              <span>Tổng tiền hàng:</span>
+              <span id="summary-subtotal">0₫</span>
+            </div>
+            <div class="summary-item">
+              <span>Phí vận chuyển:</span>
+              <span id="summary-shipping">0₫</span>
+            </div>
+            <div class="summary-total">
+              <span>Thành tiền:</span>
+              <span id="summary-total">0₫</span>
+            </div>
+            <button type="submit" class="checkout-btn" id="checkout-btn">
+              Xác nhận đặt hàng
+            </button>
+            <div
+              class="success-message"
+              id="success-message"
+              style="display: none"
+            >
+              ✅ Đặt hàng thành công! Cảm ơn bạn đã mua hàng.
+            </div>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <script type="module" src="js/checkout.js"></script>
+  </body>
+</html>

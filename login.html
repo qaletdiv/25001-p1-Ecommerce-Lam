@@ -2,15 +2,15 @@
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Ji-ho Shouta - Đăng nhập</title>
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
-    <!-- Xóa div thừa ".form-container" không dùng -->
+    <!-- Form đăng nhập -->
     <form class="form" id="login">
       <h2>Đăng nhập</h2>
-      <!-- Thêm label cho input giúp cải thiện truy cập -->
+
       <label for="username">Tên đăng nhập</label>
       <input
         id="username"
@@ -32,5 +32,41 @@
       <button type="submit">Đăng nhập</button>
       <p>Bạn chưa có tài khoản? <a href="register.html">Đăng Ký</a></p>
     </form>
+
+    <script>
+      const loginForm = document.getElementById("login");
+
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const usernameInput = document
+          .getElementById("username")
+          .value.trim()
+          .toLowerCase();
+        const passwordInput = document.getElementById("password").value;
+
+        // Lấy danh sách user từ localStorage
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+
+        // Tìm user khớp với username và password
+        const user = users.find(
+          (u) => u.username === usernameInput && u.password === passwordInput
+        );
+
+        if (user) {
+          // Lưu trạng thái đăng nhập
+          localStorage.setItem("currentUser", JSON.stringify(user));
+          localStorage.setItem("userLoggedIn", "true");
+
+          // Kiểm tra redirect nếu có
+          const params = new URLSearchParams(window.location.search);
+          const redirectTo = params.get("redirect") || "index.html";
+
+          window.location.href = redirectTo;
+        } else {
+          alert("Sai tên đăng nhập hoặc mật khẩu.");
+        }
+      });
+    </script>
   </body>
 </html>

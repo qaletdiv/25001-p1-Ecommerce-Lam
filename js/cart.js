@@ -1,43 +1,88 @@
 import { products } from "./mock-data.js";
 
-// Biến cart phải dùng let để có thể gán lại khi xóa item
+// --- CHẶN TRUY CẬP KHI CHƯA ĐĂNG NHẬP ---
+if (localStorage.getItem("userLoggedIn") !== "true") {
+  localStorage.setItem("redirectAfterLogin", window.location.pathname);
+  alert("Vui lòng đăng nhập để truy cập giỏ hàng.");
+  window.location.href = "login.html";
+}
+
+// Lấy cart từ localStorage hoặc mảng rỗng
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Tìm sản phẩm theo ID trong mảng products
+// Lọc sản phẩm còn tồn tại trong dữ liệu gốc
+cart = cart.filter((item) => getProductById(item.id));
+updateCartAndRender();
+
+// --- Hàm kiểm tra đăng nhập trước thao tác ---
+function checkLogin() {
+  if (localStorage.getItem("userLoggedIn") !== "true") {
+    // Lưu trang hiện tại để chuyển về sau login
+    localStorage.setItem(
+      "redirectAfterLogin",
+      window.location.pathname.split("/").pop()
+    );
+    alert("Bạn cần đăng nhập để thực hiện thao tác này.");
+    window.location.href = "login.html";
+    return false;
+  }
+  return true;
+}
+
+// Lấy sản phẩm theo id từ mock-data
 function getProductById(productId) {
   for (const category of products) {
-    const found = category.list.find((p) => p.id === productId);
+    const found = category.list.find((p) => String(p.id) === String(productId));
     if (found) return found;
   }
   return null;
 }
 
-// Cập nhật localStorage và render lại giỏ hàng
+// Lưu cart + render lại
 function updateCartAndRender() {
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
 }
 
-// Cập nhật số lượng sản phẩm trong giỏ
-function updateQuantity(productId, newQuantity) {
-  const item = cart.find((item) => item.id === productId);
+// Cập nhật số lượng
+function updateQuantity(productId, newQuantity, inputElement) {
+  if (!checkLogin()) return; // Bắt buộc đăng nhập trước cập nhật
+  const item = cart.find((item) => String(item.id) === String(productId));
   if (item) {
-    item.quantity = newQuantity;
-    if (item.quantity <= 0) {
-      // Nếu số lượng <= 0, xóa sản phẩm khỏi giỏ
-      cart = cart.filter((item) => item.id !== productId);
+    if (newQuantity < 1 || isNaN(newQuantity)) {
+      showToast("Số lượng phải lớn hơn hoặc bằng 1");
+      inputElement.value = item.quantity;
+      return;
     }
+    item.quantity = newQuantity;
     updateCartAndRender();
+    showToast("Cập nhật thành công");
   }
 }
 
-// Xóa sản phẩm theo ID
+// Xóa sản phẩm khỏi giỏ
 function removeItem(productId) {
-  cart = cart.filter((item) => item.id !== productId);
-  updateCartAndRender();
+  if (!checkLogin()) return; // Bắt buộc đăng nhập trước xóa
+  const container = document.querySelector("#cart-container");
+  const itemDiv = container
+    .querySelector(`button[data-id="${productId}"]`)
+    ?.closest(".cart-item");
+  if (itemDiv) {
+    itemDiv.style.transition = "opacity 0.4s";
+    itemDiv.style.opacity = "0";
+    setTimeout(() => {
+      cart = cart.filter((item) => String(item.id) !== String(productId));
+      updateCartAndRender();
+      showToast("Đã xóa sản phẩm");
+    }, 400);
+  } else {
+    cart = cart.filter((item) => String(item.id) !== String(productId));
+    updateCartAndRender();
+    showToast("Đã xóa sản phẩm");
+  }
 }
 
-// Render giỏ hàng ra HTML
+// Render giỏ hàng
 function renderCart() {
   const container = document.querySelector("#cart-container");
   container.innerHTML = "";
@@ -79,7 +124,6 @@ function renderCart() {
         <button class="remove-btn" data-id="${item.id}">Xóa</button>
       </div>
     `;
-
     container.appendChild(div);
   });
 
@@ -90,7 +134,7 @@ function renderCart() {
   })}`;
   container.appendChild(totalEl);
 
-  // Thêm nút Thanh toán nếu chưa có
+  // Tạo nút thanh toán nếu chưa có
   if (!document.getElementById("checkout-btn")) {
     const checkoutBtn = document.createElement("button");
     checkoutBtn.textContent = "Thanh toán";
@@ -110,30 +154,28 @@ function renderCart() {
     container.appendChild(checkoutBtn);
 
     checkoutBtn.addEventListener("click", () => {
+      if (!checkLogin()) return; // Bắt buộc đăng nhập trước thanh toán
       if (cart.length === 0) {
-        alert(
-          "Giỏ hàng đang trống, vui lòng thêm sản phẩm trước khi thanh toán."
-        );
+        alert("Giỏ hàng đang trống!");
         return;
       }
       showCheckoutModal();
     });
   }
 
-  // Bắt sự kiện thay đổi số lượng input
+  // Bắt sự kiện thay đổi số lượng
   container.querySelectorAll(".quantity-input").forEach((input) => {
     input.addEventListener("change", (e) => {
       const id = e.target.dataset.id;
       const newQty = parseInt(e.target.value, 10);
-      if (isNaN(newQty) || newQty < 1) {
-        removeItem(id);
-      } else {
-        updateQuantity(id, newQty);
-      }
+      updateQuantity(id, newQty, e.target);
+    });
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") e.target.blur();
     });
   });
 
-  // Bắt sự kiện nút xóa sản phẩm
+  // Bắt sự kiện xóa sản phẩm
   container.querySelectorAll(".remove-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       removeItem(btn.dataset.id);
@@ -141,112 +183,119 @@ function renderCart() {
   });
 }
 
-// Hiển thị modal thanh toán với form nhập thông tin
+// Modal thanh toán
 function showCheckoutModal() {
   if (document.getElementById("checkout-modal")) return;
 
+  // Thêm style cho modal
+  if (!document.getElementById("checkout-modal-style")) {
+    const style = document.createElement("style");
+    style.id = "checkout-modal-style";
+    style.textContent = `
+      #checkout-modal {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        overflow-y: auto;
+      }
+      #checkout-modal > div {
+        background: white;
+        padding: 30px 40px;
+        border-radius: 10px;
+        max-width: 400px;
+        width: 90%;
+        box-sizing: border-box;
+      }
+      #checkout-modal h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #116c08;
+      }
+      #checkout-modal label {
+        font-weight: 600;
+      }
+      #checkout-modal input[type="text"],
+      #checkout-modal input[type="tel"],
+      #checkout-modal textarea {
+        width: 100%;
+        padding: 8px 10px;
+        margin: 6px 0 15px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 14px;
+      }
+      #checkout-modal textarea {
+        resize: vertical;
+      }
+      #checkout-modal input[type="radio"] {
+        margin-right: 6px;
+      }
+      #checkout-modal button[type="submit"] {
+        background-color: #5d8e20;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+      }
+      #checkout-modal button[type="submit"]:hover {
+        background-color: #477415;
+      }
+      @media (max-width: 480px) {
+        #checkout-modal > div {
+          padding: 20px 15px;
+          max-width: 95%;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   const modal = document.createElement("div");
   modal.id = "checkout-modal";
-  modal.style = `
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-  `;
 
   const modalContent = document.createElement("div");
-  modalContent.style = `
-    background: white;
-    padding: 30px 40px;
-    border-radius: 10px;
-    max-width: 400px;
-  `;
 
   modalContent.innerHTML = `
     <h2>Thanh toán đơn hàng</h2>
     <form id="checkout-form">
-      <div style="margin-bottom: 15px;">
-        <label for="name">Họ và tên:</label><br />
-        <input type="text" id="name" name="name" required style="width: 100%; padding: 8px;" />
-      </div>
-      <div style="margin-bottom: 15px;">
-        <label for="address">Địa chỉ giao hàng:</label><br />
-        <textarea id="address" name="address" required style="width: 100%; padding: 8px;"></textarea>
-      </div>
-      <div style="margin-bottom: 15px;">
-        <label for="phone">Số điện thoại:</label><br />
-        <input type="tel" id="phone" name="phone" pattern="[0-9]{9,12}" required style="width: 100%; padding: 8px;" />
-      </div>
-      <div style="margin-bottom: 20px;">
-        <p>Phương thức thanh toán:</p>
+      <div><label>Họ và tên:</label><br /><input type="text" required /></div>
+      <div><label>Địa chỉ:</label><br /><textarea required></textarea></div>
+      <div><label>SĐT:</label><br /><input type="tel" pattern="[0-9]{9,12}" required /></div>
+      <div>
         <label><input type="radio" name="payment" value="Tiền mặt" checked /> Tiền mặt</label><br />
         <label><input type="radio" name="payment" value="Thẻ tín dụng" /> Thẻ tín dụng</label><br />
         <label><input type="radio" name="payment" value="Ví điện tử" /> Ví điện tử</label>
       </div>
-      <div style="text-align: center;">
-        <button type="submit" style="
-          background-color: #5d8e20;
-          color: white;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 6px;
-          cursor: pointer;
-          margin-right: 10px;
-          font-size: 16px;
-        ">Xác nhận</button>
-        <button type="button" id="cancel-btn" style="
-          background-color: #f44336;
-          color: white;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 6px;
-          cursor: pointer;
-          font-size: 16px;
-        ">Hủy</button>
-      </div>
+      <button type="submit">Xác nhận</button>
     </form>
   `;
 
   modal.appendChild(modalContent);
   document.body.appendChild(modal);
 
-  // Xử lý nút hủy: đóng modal
-  document.getElementById("cancel-btn").onclick = () => {
-    document.body.removeChild(modal);
-  };
+  // Focus tự động vào input đầu tiên
+  modalContent.querySelector("input").focus();
+
+  // Đóng modal khi click ngoài
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.remove();
+  });
 
   // Xử lý submit form thanh toán
-  document.getElementById("checkout-form").onsubmit = (e) => {
+  modal.querySelector("#checkout-form").addEventListener("submit", (e) => {
     e.preventDefault();
-
-    const form = e.target;
-    const name = form.name.value.trim();
-    const address = form.address.value.trim();
-    const phone = form.phone.value.trim();
-    const payment = form.payment.value;
-
-    // Kiểm tra dữ liệu hợp lệ
-    if (!name || !address || !phone) {
-      alert("Vui lòng điền đầy đủ thông tin giao hàng.");
-      return;
-    }
-
-    // Thông báo thành công và xóa giỏ hàng
-    alert(`Thanh toán thành công!\n
-Họ tên: ${name}\n
-Địa chỉ: ${address}\n
-Số điện thoại: ${phone}\n
-Phương thức thanh toán: ${payment}\n
-Cảm ơn bạn đã mua hàng!`);
-
+    localStorage.removeItem("cart");
     cart = [];
-    updateCartAndRender();
-    document.body.removeChild(modal);
-  };
+    modal.remove();
+    showToast("Thanh toán thành công!");
+    renderCart();
+  });
 }
-
-// Khởi tạo render khi load trang
-renderCart();

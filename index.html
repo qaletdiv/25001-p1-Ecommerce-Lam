@@ -4,25 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ji-ho Shouta</title>
+
+    <!-- Sử dụng module JS, defer để tải không chặn rendering -->
     <script src="js/main.js" type="module" defer></script>
+
+    <!-- CSS chung -->
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
+    <!-- Header cố định trên đầu trang -->
     <header class="header-fixed">
       <div class="main-content">
         <div class="body-header">
-          <!-- logo -->
+          <!-- Logo website -->
           <img src="./img/logo.png" alt="Ji-ho Shouta" class="logo" />
-          <!-- the nav -->
+
+          <!-- Thanh điều hướng chính -->
           <nav class="navbar">
             <ul class="nav-menu">
-              <li class="active"><a href="#!"> Trang chủ</a></li>
+              <li class="active"><a href="#!">Trang chủ</a></li>
               <li><a href="products.html">Sản phẩm</a></li>
               <li><a href="#!">Liên hệ</a></li>
-              <li><a href="login.html">Đăng nhập</a></li>
+              <li><div id="login-btn">Đăng nhập</div></li>
               <li>
-                <a href="cart.html" class="cart-link"
-                  >🛒
+                <!-- Link giỏ hàng với biểu tượng 🛒 -->
+                <a href="cart.html" class="cart-link">
+                  🛒
                   <span
                     id="cart-count"
                     style="
@@ -42,12 +49,20 @@
               </li>
             </ul>
           </nav>
+
+          <!-- Thanh tìm kiếm sản phẩm -->
           <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Tìm sản phẩm..." />
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Tìm sản phẩm..."
+              aria-label="Nhập tên sản phẩm để tìm kiếm"
+            />
             <button
               onclick="searchProducts()"
               class="search-btn"
               aria-label="Tìm kiếm"
+              type="button"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -65,19 +80,30 @@
         </div>
       </div>
     </header>
+
     <main>
+      <!-- Banner hình ảnh -->
       <div>
         <img
           src="https://s3-hcmc02.higiocloud.vn/images/2025/08/matcha_resize_websitecover_2560x768-1--20250805052556.jpg"
           alt="Sản phẩm mới"
-          width="auto"
-          height="384px"
+          width="100%"
+          height="384"
+          style="object-fit: cover"
         />
       </div>
+
+      <!-- Tiêu đề cho phần sản phẩm nổi bật -->
       <h2>Sản phẩm nổi bật</h2>
+
+      <!-- Nơi sẽ hiển thị các sản phẩm nổi bật bằng JS -->
       <div id="featured-products" class="product-grid"></div>
     </main>
+
+    <!-- Phần này để hiển thị sản phẩm chính (nếu có) -->
     <section class="main-product"></section>
+
+    <!-- Footer đơn giản -->
     <footer>
       <p>&copy; 2025 Ji-ho Shouta - All rights reserved.</p>
     </footer>

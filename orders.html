@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lịch sử đơn hàng</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      /* Bổ sung CSS riêng cho phần đơn hàng */
+      .orders-container {
+        max-width: 960px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      }
+
+      .orders-container h2 {
+        text-align: center;
+        margin-bottom: 24px;
+        color: #5d8e20;
+      }
+
+      .order-item {
+        border: 1px solid #ddd;
+        padding: 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      .order-item h3 {
+        margin-bottom: 10px;
+        color: #333;
+      }
+
+      .order-detail {
+        line-height: 1.6;
+      }
+
+      .order-detail span.label {
+        font-weight: bold;
+        color: #444;
+      }
+
+      .empty-message {
+        text-align: center;
+        color: #888;
+        font-style: italic;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header-fixed">
+      <div class="body-header main-content">
+        <img src="./img/logo.png" class="logo" alt="Logo" />
+        <nav class="navbar">
+          <ul class="nav-menu">
+            <li><a href="index.html">Trang chủ</a></li>
+            <li><a href="products.html">Sản phẩm</a></li>
+            <li><a href="cart.html">Giỏ hàng</a></li>
+            <li><a href="checkout.html">Thanh toán</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="orders-container">
+        <h2>Lịch sử đơn hàng</h2>
+        <div id="orders-list">
+          <!-- Danh sách đơn hàng sẽ được render tại đây -->
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Format tiền VND
+      function formatVND(num) {
+        return num.toLocaleString("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        });
+      }
+
+      // Format ngày từ ISO string
+      function formatDate(isoString) {
+        const d = new Date(isoString);
+        return d.toLocaleDateString("vi-VN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      }
+
+      // Hiển thị danh sách đơn hàng từ localStorage
+      function renderOrders() {
+        const ordersList = document.getElementById("orders-list");
+        const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+
+        if (orders.length === 0) {
+          ordersList.innerHTML =
+            '<div class="empty-message">Bạn chưa có đơn hàng nào.</div>';
+          return;
+        }
+
+        orders.reverse().forEach((order, index) => {
+          const orderEl = document.createElement("div");
+          orderEl.className = "order-item";
+
+          orderEl.innerHTML = `
+          <h3>Đơn hàng #${orders.length - index}</h3>
+          <div class="order-detail">
+            <p><span class="label">Họ tên:</span> ${order.name}</p>
+            <p><span class="label">Email:</span> ${order.email}</p>
+            <p><span class="label">Số điện thoại:</span> ${order.phone}</p>
+            <p><span class="label">Địa chỉ:</span> ${order.address}</p>
+            <p><span class="label">Phương thức thanh toán:</span> ${
+              order.paymentMethod
+            }</p>
+            <p><span class="label">Tổng tiền hàng:</span> ${formatVND(
+              order.subtotal
+            )}</p>
+            <p><span class="label">Phí vận chuyển:</span> ${formatVND(
+              order.shipping
+            )}</p>
+            <p><span class="label">Thành tiền:</span> <strong>${formatVND(
+              order.total
+            )}</strong></p>
+            <p><span class="label">Ngày đặt:</span> ${formatDate(
+              order.date
+            )}</p>
+          </div>
+        `;
+
+          ordersList.appendChild(orderEl);
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", renderOrders);
+    </script>
+  </body>
+</html>

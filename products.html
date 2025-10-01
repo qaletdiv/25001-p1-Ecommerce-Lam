@@ -7,13 +7,17 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
+    <!-- Header cố định trên cùng -->
     <header class="header-fixed">
       <div class="body-header main-content">
+        <!-- Logo -->
         <img src="./img/logo.png" class="logo" alt="Logo" />
+        <!-- Thanh điều hướng -->
         <nav class="navbar">
           <ul class="nav-menu">
             <li><a href="index.html">Trang chủ</a></li>
             <li class="active"><a href="products.html">Sản phẩm</a></li>
+            <!-- trang hiện tại -->
             <li><a href="cart.html">Giỏ hàng</a></li>
             <li><a href="login.html">Đăng nhập</a></li>
           </ul>
@@ -21,15 +25,19 @@
       </div>
     </header>
 
+    <!-- Nội dung chính: danh sách sản phẩm -->
     <main class="main-content">
       <h2 class="title-product">Tất cả sản phẩm</h2>
       <div id="product-list" class="product-list"></div>
+      <!-- nơi render sản phẩm -->
     </main>
 
+    <!-- Footer đơn giản -->
     <footer>
       <p>&copy; 2025 - Thương hiệu đồ uống của bạn</p>
     </footer>
 
+    <!-- Script chính cho trang sản phẩm -->
     <script type="module" src="js/products.js"></script>
   </body>
 </html>
