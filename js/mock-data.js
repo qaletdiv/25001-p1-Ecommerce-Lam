@@ -16,6 +16,7 @@ const products = [
         description: "Hương vị cà phê nguyên bản mạnh mẽ chuẩn vị gu mạnh.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
       {
         id: "caphe-02",
@@ -26,6 +27,7 @@ const products = [
           "Hương vị cà phê nguyên bản kết hợp ăn ý cùng sữa đặc thơm béo.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
       {
         id: "caphe-03",
@@ -36,6 +38,7 @@ const products = [
           "Hương vị cà phê đậm kết hợp hạnh nhân hòa quyện ăn ý cùng sữa tươi thơm béo.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
       {
         id: "caphe-04",
@@ -46,6 +49,7 @@ const products = [
           "Hương vị cà phê đậm hòa quyện ăn ý cùng sữa tươi thơm béo.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
       {
         id: "caphe-05",
@@ -56,6 +60,7 @@ const products = [
           "Hương vị cà phê với phiên bản nhẹ nhàng ai cũng có thể thử mà không sợ say.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
     ],
   },
@@ -70,6 +75,7 @@ const products = [
         description: "Hương vị trà sữa đậm vị đúng gu .",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: true,
       },
       {
         id: "trasua-02",
@@ -80,6 +86,7 @@ const products = [
           "Hương vị trà sữa đậm hòa kết hợp ăn ý cùng gạo rang bổ dưỡng .",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: true,
       },
       {
         id: "trasua-03",
@@ -89,6 +96,7 @@ const products = [
         description: "Hương vị trà sữa đậm đà, pha chế từ lá trà tuyển chọn.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: true,
       },
       {
         id: "trasua-04",
@@ -98,6 +106,7 @@ const products = [
         description: "Hương vị trà sữa đậm đà, pha chế từ lá trà nguyên chất.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: true,
       },
       {
         id: "trasua-05",
@@ -108,15 +117,17 @@ const products = [
           "Hương vị lài thơm hòa cùng o long đậm đà, pha chế từ lá trà nguyên bản.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: true,
       },
       {
         id: "trasua-06",
-        img: "https://alodaubep.com/wp-content/uploads/2024/10/cach-lam-tra-sua-khoai-mon.jpg",
+        img: "https://cherryngoc.vn/wp-content/uploads/2024/07/cach-nau-tra-sua-khoai-mon-3.jpg",
         name: "Trà sữa Ta-go",
         price: 28000,
         description: "Hương vị trà sữa đậm đà kết hợp khoai môn tươi dậy vị.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: true,
       },
     ],
   },
@@ -131,6 +142,7 @@ const products = [
         description: "Hương vị Matcha nguyên chất hòa quyện cùng sữa đậm đà.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
       {
         id: "matcha-02",
@@ -140,6 +152,7 @@ const products = [
         description: "Hương vị Matcha kết hợp cùng bưởi chua thanh.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
       {
         id: "matcha-03",
@@ -150,6 +163,7 @@ const products = [
           "Hương vị Matcha truyền thống mix với nước dừa ngọt thanh.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
       {
         id: "matcha-04",
@@ -159,6 +173,7 @@ const products = [
         description: "Hương vị Matcha đậm đà hòa quyện cùng sữa dừa thơm béo.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
       {
         id: "matcha-05",
@@ -169,6 +184,7 @@ const products = [
           "Hương vị Matcha nguyên bản kết hợp cùng sữa tươi thanh trùng tuyệt hảo .",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
     ],
   },
@@ -184,6 +200,7 @@ const products = [
           "Hương vị đào ngọt nhẹ, kết hợp cam tươi mọng nước và xả thơm mát – tươi mới và dễ chịu.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: true,
       },
       {
         id: "tratraicay-02",
@@ -194,6 +211,7 @@ const products = [
           "Vị chua thanh của Hibiscus hoà quyện cùng bưởi mọng nước, mang đến cảm giác tươi mát, nhẹ nhàng và cực kỳ giải khát.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: true,
       },
       {
         id: "tratraicay-03",
@@ -204,6 +222,7 @@ const products = [
           "Trà ô-long ủ cùng hương sen vàng dịu nhẹ, điểm thêm chút lá dứa thơm thoang thoảng – một sự kết hợp thư giãn và thanh lọc cơ thể.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: true,
       },
       {
         id: "tratraicay-04",
@@ -214,6 +233,7 @@ const products = [
           "Vị thanh mát, hơi the nhẹ của Yu-zu Nhật Bản kết hợp với độ ngọt dịu từ trái vải sảng khoái và độc đáo, khó quên ngay từ ngụm đầu tiên.",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: true,
       },
       {
         id: "tratraicay-05",
@@ -224,6 +244,7 @@ const products = [
           "Vị trà đậm đà gợi nhớ về ly trà tắc sủi bọt ngày xưa thân quen và đầy hoài niệm. ",
         specs: defaultSpecs,
         isFeatured: true,
+        customizable: true,
       },
     ],
   },
@@ -236,7 +257,9 @@ const products = [
         name: "Trân châu đường đen",
         price: 3000,
         description: "Trân châu nấu với đường đen thơm ngọt, mềm dai.",
+        specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
       {
         id: "topping-02",
@@ -245,7 +268,9 @@ const products = [
         price: 3000,
         description:
           "Dai giòn sần sật, kết hợp hoàn hảo với mọi loại thức uống.",
+        specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
       {
         id: "topping-03",
@@ -253,7 +278,9 @@ const products = [
         name: "Pudding trứng",
         price: 3000,
         description: "Mềm mịn, béo nhẹ, tan chảy trong miệng.",
+        specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
       {
         id: "topping-04",
@@ -261,7 +288,9 @@ const products = [
         name: "Pudding cho-co",
         price: 3000,
         description: "Vị ca cao thơm đậm, ngọt vừa, mềm mát dễ ghiền.",
+        specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
       {
         id: "topping-05",
@@ -269,7 +298,9 @@ const products = [
         name: "Thạch sương sáo",
         price: 3000,
         description: "Mát lạnh, vị nhẹ thanh – giúp cân bằng vị ngọt.",
+        specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
       {
         id: "topping-06",
@@ -277,7 +308,9 @@ const products = [
         name: "Phô mai viên",
         price: 5000,
         description: "Phô mai mềm mịn, vị béo nhẹ nhàng.",
+        specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
       {
         id: "topping-07",
@@ -286,7 +319,9 @@ const products = [
         price: 3000,
         description:
           "Vị đào dịu nhẹ, thơm mát, tăng thêm sắc hương cho ly nước.",
+        specs: defaultSpecs,
         isFeatured: true,
+        customizable: false,
       },
     ],
   },

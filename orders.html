@@ -2,11 +2,11 @@
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Lịch sử đơn hàng</title>
     <link rel="stylesheet" href="css/style.css" />
     <style>
-      /* Bổ sung CSS riêng cho phần đơn hàng */
+      /* CSS riêng cho trang orders */
       .orders-container {
         max-width: 960px;
         margin: 40px auto;
@@ -16,10 +16,10 @@
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
       }
 
-      .orders-container h2 {
+      h2 {
         text-align: center;
         margin-bottom: 24px;
-        color: #5d8e20;
+        color: #2c7a7b;
       }
 
       .order-item {
@@ -27,27 +27,100 @@
         padding: 16px;
         border-radius: 8px;
         margin-bottom: 20px;
+        background: #f9f9f9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
       }
 
-      .order-item h3 {
-        margin-bottom: 10px;
+      .order-info {
+        max-width: 70%;
+      }
+
+      .order-actions button {
+        margin-left: 10px;
+        padding: 8px 12px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .btn-view {
+        background-color: #3182ce;
+        color: white;
+      }
+      .btn-view:hover {
+        background-color: #2b6cb0;
+      }
+
+      .btn-cancel {
+        background-color: #e53e3e;
+        color: white;
+      }
+      .btn-cancel:hover {
+        background-color: #9b2c2c;
+      }
+
+      .btn-print {
+        background-color: #38a169;
+        color: white;
+      }
+      .btn-print:hover {
+        background-color: #276749;
+      }
+
+      /* Modal popup */
+      .modal {
+        display: none; /* ẩn mặc định */
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-content {
+        background-color: #fefefe;
+        margin: 60px auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 600px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        position: relative;
+      }
+
+      .modal-header {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #999;
+        transition: color 0.3s;
+      }
+      .modal-close:hover {
         color: #333;
       }
 
-      .order-detail {
-        line-height: 1.6;
+      .order-items-list {
+        margin-top: 10px;
       }
-
-      .order-detail span.label {
-        font-weight: bold;
-        color: #444;
-      }
-
-      .empty-message {
-        text-align: center;
-        color: #888;
-        font-style: italic;
-        padding: 20px;
+      .order-items-list li {
+        margin-bottom: 6px;
       }
     </style>
   </head>
@@ -61,6 +134,7 @@
             <li><a href="products.html">Sản phẩm</a></li>
             <li><a href="cart.html">Giỏ hàng</a></li>
             <li><a href="checkout.html">Thanh toán</a></li>
+            <li><a href="orders.html" class="active">Lịch sử đơn hàng</a></li>
           </ul>
         </nav>
       </div>
@@ -68,79 +142,23 @@
 
     <main class="main-content">
       <div class="orders-container">
-        <h2>Lịch sử đơn hàng</h2>
+        <h2>Lịch sử đơn hàng của bạn</h2>
         <div id="orders-list">
-          <!-- Danh sách đơn hàng sẽ được render tại đây -->
+          <!-- Danh sách đơn hàng sẽ hiển thị tại đây -->
         </div>
       </div>
     </main>
 
-    <script>
-      // Format tiền VND
-      function formatVND(num) {
-        return num.toLocaleString("vi-VN", {
-          style: "currency",
-          currency: "VND",
-        });
-      }
+    <!-- Modal xem chi tiết đơn hàng -->
+    <div id="orderModal" class="modal">
+      <div class="modal-content">
+        <span class="modal-close" id="modalCloseBtn">&times;</span>
+        <div id="modalBody">
+          <!-- Nội dung chi tiết đơn hàng sẽ được render ở đây -->
+        </div>
+      </div>
+    </div>
 
-      // Format ngày từ ISO string
-      function formatDate(isoString) {
-        const d = new Date(isoString);
-        return d.toLocaleDateString("vi-VN", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-      }
-
-      // Hiển thị danh sách đơn hàng từ localStorage
-      function renderOrders() {
-        const ordersList = document.getElementById("orders-list");
-        const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-
-        if (orders.length === 0) {
-          ordersList.innerHTML =
-            '<div class="empty-message">Bạn chưa có đơn hàng nào.</div>';
-          return;
-        }
-
-        orders.reverse().forEach((order, index) => {
-          const orderEl = document.createElement("div");
-          orderEl.className = "order-item";
-
-          orderEl.innerHTML = `
-          <h3>Đơn hàng #${orders.length - index}</h3>
-          <div class="order-detail">
-            <p><span class="label">Họ tên:</span> ${order.name}</p>
-            <p><span class="label">Email:</span> ${order.email}</p>
-            <p><span class="label">Số điện thoại:</span> ${order.phone}</p>
-            <p><span class="label">Địa chỉ:</span> ${order.address}</p>
-            <p><span class="label">Phương thức thanh toán:</span> ${
-              order.paymentMethod
-            }</p>
-            <p><span class="label">Tổng tiền hàng:</span> ${formatVND(
-              order.subtotal
-            )}</p>
-            <p><span class="label">Phí vận chuyển:</span> ${formatVND(
-              order.shipping
-            )}</p>
-            <p><span class="label">Thành tiền:</span> <strong>${formatVND(
-              order.total
-            )}</strong></p>
-            <p><span class="label">Ngày đặt:</span> ${formatDate(
-              order.date
-            )}</p>
-          </div>
-        `;
-
-          ordersList.appendChild(orderEl);
-        });
-      }
-
-      document.addEventListener("DOMContentLoaded", renderOrders);
-    </script>
+    <script type="module" src="js/orders.js"></script>
   </body>
 </html>

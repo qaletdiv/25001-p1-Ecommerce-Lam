@@ -13,22 +13,26 @@
         <nav class="navbar">
           <ul class="nav-menu">
             <li><a href="index.html">Trang chủ</a></li>
+            <li><a href="products.html">Sản phẩm</a></li>
             <li><a href="cart.html">Giỏ hàng</a></li>
-            <li><a href="login.html">Đăng nhập</a></li>
+            <li id="account-menu">
+              <a href="login.html" id="account-link">Đăng nhập</a>
+            </li>
           </ul>
         </nav>
       </div>
     </header>
 
     <main class="main-content">
-      <div id="product-detail" class="product-detail-container"></div>
+      <div id="product-detail" class="product-detail"></div>
+      <div id="toast-container"></div>
 
       <h3>Sản phẩm liên quan</h3>
       <div id="related-products" class="product-list"></div>
     </main>
 
     <footer>
-      <p>&copy; 2025 - Thương hiệu đồ uống của bạn</p>
+      <p>&copy; 2025 Ji-ho Shouta - All rights reserved.</p>
     </footer>
 
     <script type="module" src="js/product-detail.js"></script>

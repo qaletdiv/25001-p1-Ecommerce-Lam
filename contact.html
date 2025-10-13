@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liên Hệ</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <h1>Liên Hệ Với Chúng Tôi</h1>
+      <p>Chúng tôi luôn sẵn sàng giải đáp mọi thắc mắc của bạn!</p>
+    </header>
+
+    <!-- Form Liên Hệ -->
+    <section class="contact-form">
+      <h2>Gửi Thông Tin</h2>
+      <form id="contact-form">
+        <label for="name">Họ Tên:</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="message">Nội Dung:</label>
+        <textarea id="message" name="message" required></textarea>
+
+        <button type="submit">Gửi</button>
+      </form>
+      <div id="success-message" class="hidden">
+        Cảm ơn bạn đã liên hệ với chúng tôi! Chúng tôi sẽ phản hồi sớm!
+      </div>
+      <div id="error-message" class="hidden">
+        Có lỗi xảy ra. Vui lòng thử lại sau.
+      </div>
+    </section>
+
+    <!-- Thông tin liên hệ -->
+    <section class="contact-info">
+      <h2>Thông Tin Liên Hệ</h2>
+      <ul>
+        <li>
+          <strong>Địa chỉ:</strong> 123 Đường ABC, Phường Vĩnh Châu, Thành phố
+          Cần Thơ
+        </li>
+        <li><strong>Số điện thoại:</strong> 0987 654 321</li>
+        <li><strong>Email:</strong> jiho-shouta-support@website.com</li>
+      </ul>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 Ji-ho Shouta - All rights reserved.</p>
+    </footer>
+
+    <script src="./js/contact.js" type="module"></script>
+  </body>
+</html>

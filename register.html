@@ -7,51 +7,70 @@
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
-    <!-- Form đăng ký tài khoản mới -->
-    <form class="form" id="register">
+    <!-- Form đăng ký -->
+    <form class="form-register" id="register">
       <h2>Đăng Ký</h2>
 
-      <label for="username">Tên đăng nhập</label>
-      <input
-        id="username"
-        type="text"
-        name="username"
-        placeholder="Tên đăng nhập"
-        required
-      />
+      <div class="form-group">
+        <label for="fullName">Họ và tên</label>
+        <input
+          id="fullName"
+          type="text"
+          name="fullName"
+          placeholder="Họ và tên"
+          required
+        />
+      </div>
 
-      <label for="email">Email</label>
-      <input
-        id="email"
-        type="email"
-        name="email"
-        placeholder="Email"
-        required
-      />
+      <div class="form-group">
+        <label for="username">Tên đăng nhập</label>
+        <input
+          id="username"
+          type="text"
+          name="username"
+          placeholder="Tên đăng nhập"
+          required
+        />
+      </div>
 
-      <label for="password">Mật khẩu</label>
-      <input
-        id="password"
-        type="password"
-        name="password"
-        placeholder="Mật khẩu"
-        required
-      />
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          placeholder="Email"
+          required
+        />
+      </div>
 
-      <label for="confirmPassword">Nhập lại mật khẩu</label>
-      <input
-        id="confirmPassword"
-        type="password"
-        name="confirmPassword"
-        placeholder="Nhập lại mật khẩu"
-        required
-      />
+      <div class="form-group">
+        <label for="password">Mật khẩu</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          placeholder="Mật khẩu"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Nhập lại mật khẩu</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          name="confirmPassword"
+          placeholder="Nhập lại mật khẩu"
+          required
+        />
+      </div>
 
       <button type="submit">Đăng Ký</button>
       <p><a href="login.html">Đã có tài khoản?</a></p>
     </form>
 
-    <!-- Script xử lý đăng ký -->
-    <script src="./js/register.js"></script>
+    <!-- JS -->
+    <script type="module" src="./js/register.js"></script>
   </body>
 </html>

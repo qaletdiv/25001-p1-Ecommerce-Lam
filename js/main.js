@@ -1,103 +1,144 @@
-import { products } from "./mock-data.js";
+import { products } from "./mock-data.js"; // Import danh sách sản phẩm từ file tĩnh
 
 /**
  * Khởi tạo dữ liệu ban đầu vào localStorage nếu chưa có.
- * - products: danh sách sản phẩm
- * - users: danh sách người dùng (mặc định rỗng)
- * - currentUser: người dùng đang đăng nhập (mặc định rỗng)
+ * Điều này đảm bảo rằng dữ liệu như sản phẩm, người dùng, trạng thái đăng nhập được lưu trữ sẵn khi lần đầu sử dụng.
  */
 function initData() {
   if (!localStorage.getItem("products")) {
-    localStorage.setItem("products", JSON.stringify(products));
+    localStorage.setItem("products", JSON.stringify(products)); // Lưu trữ danh sách sản phẩm vào localStorage nếu chưa có
   }
   if (!localStorage.getItem("users")) {
-    localStorage.setItem("users", JSON.stringify([]));
+    localStorage.setItem("users", JSON.stringify([])); // Lưu trữ danh sách người dùng nếu chưa có
   }
   if (!localStorage.getItem("currentUser")) {
-    localStorage.setItem("currentUser", "");
+    localStorage.setItem("currentUser", ""); // Lưu trữ thông tin người dùng hiện tại nếu chưa có
+  }
+  if (!localStorage.getItem("userLoggedIn")) {
+    localStorage.setItem("userLoggedIn", "false"); // Lưu trữ trạng thái đăng nhập nếu chưa có
   }
 }
 
 /**
- * Hiển thị danh sách sản phẩm theo tên danh mục (category)
- * @param {string} nameTitle - Tên danh mục sản phẩm (ví dụ: "Cà phê")
+ * Render các sản phẩm thuộc danh mục nameTitle vào phần .main-product
+ * Hàm này giúp hiển thị các sản phẩm theo từng danh mục, mỗi sản phẩm sẽ có nút "Thêm vào giỏ" hoặc "Tuỳ chỉnh" nếu có.
+ *
+ * @param {string} nameTitle - Tên danh mục sản phẩm (ví dụ: "Cà phê", "Trà sữa", v.v.)
  */
 function renderProducts(nameTitle) {
-  // Tạo tiêu đề cho danh sách sản phẩm
+  const container = document.querySelector(".main-product"); // Tìm phần tử chứa sản phẩm trên trang
+  if (!container) {
+    console.error("Element .main-product không tìm thấy trong HTML");
+    return;
+  }
+
+  // Tạo tiêu đề danh mục sản phẩm
   const titleProduct = document.createElement("h2");
-  titleProduct.textContent = `Danh sách sản phẩm ${nameTitle}`;
+  titleProduct.textContent = `Danh sách sản phẩm: ${nameTitle}`;
   titleProduct.classList.add("title-product");
 
-  // Container chứa các card sản phẩm
   const productsListTitle = document.createElement("div");
   productsListTitle.classList.add("product-list");
 
-  // Lấy thẻ chứa sản phẩm chính trong HTML
-  const container = document.querySelector(".main-product");
+  // Tìm danh mục sản phẩm theo tên
+  const categoryObj = products.find((cat) => cat.category === nameTitle);
+  if (!categoryObj) {
+    container.innerHTML += `<p>Không tìm thấy danh mục sản phẩm: ${nameTitle}</p>`;
+    return;
+  }
 
-  // Lặp qua từng danh mục trong products
-  products.forEach((category) => {
-    if (category.category === nameTitle) {
-      // Với mỗi sản phẩm trong danh mục này, tạo card hiển thị
-      category.list.forEach((product) => {
-        const card = document.createElement("div");
-        card.className = "product-card";
-
-        card.innerHTML = `
-          <img width="280" height="250" src="${product.img}" alt="${
-          product.name
-        }">
-          <h3>${product.name}</h3>
-          <p>${product.price.toLocaleString("vi-VN", {
-            style: "currency",
-            currency: "VND",
-          })}</p>
-          <button class="product-btn" data-id="${
-            product.id
-          }">Thêm vào giỏ</button>
-        `;
-
-        // Gán sự kiện click cho nút "Thêm vào giỏ"
-        const btn = card.querySelector(".product-btn");
-        btn.addEventListener("click", () => {
-          addToCart(product.id);
-        });
-
-        productsListTitle.appendChild(card);
-      });
+  // Render các sản phẩm trong danh mục
+  categoryObj.list.forEach((product) => {
+    if (
+      !product ||
+      typeof product.price !== "number" ||
+      !product.name ||
+      !product.img
+    ) {
+      console.warn("Sản phẩm không hợp lệ:", product);
+      return;
     }
+
+    const card = document.createElement("div");
+    card.className = "product-card";
+
+    card.innerHTML = `
+      <img width="280" height="250" src="${product.img}" alt="${product.name}">
+      <h3>${product.name}</h3>
+      <p>${
+        !isNaN(product.price)
+          ? Number(product.price).toLocaleString("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            })
+          : "Liên hệ"
+      }</p>
+      <button class="product-btn" data-id="${product.id}" data-customizable="${
+      product.customizable
+    }">
+        Thêm vào giỏ
+      </button>
+    `;
+
+    const btn = card.querySelector(".product-btn");
+    // Xử lý sự kiện khi người dùng nhấn nút "Thêm vào giỏ"
+    btn.addEventListener("click", () => {
+      const isLogin = localStorage.getItem("userLoggedIn") === "true";
+      if (!isLogin) {
+        alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      // Nếu sản phẩm có tùy chỉnh, chuyển đến trang chi tiết sản phẩm
+      if (product.customizable) {
+        window.location.href = `product-detail.html?id=${product.id}`;
+      } else {
+        // Nếu không có tùy chỉnh, trực tiếp thêm vào giỏ hàng
+        addToCart(product.id);
+      }
+    });
+
+    productsListTitle.appendChild(card);
   });
 
-  // Thêm tiêu đề và danh sách sản phẩm vào container chính
   container.appendChild(titleProduct);
   container.appendChild(productsListTitle);
 }
 
 /**
- * Lấy dữ liệu giỏ hàng từ localStorage
- * @returns {Array} mảng các sản phẩm trong giỏ hàng [{id, quantity}]
+ * Các hàm giỏ hàng
  */
+function getCartKey() {
+  const currentUserRaw = localStorage.getItem("currentUser");
+  const currentUser = currentUserRaw ? JSON.parse(currentUserRaw) : null;
+  // Sử dụng email của người dùng làm key cho giỏ hàng (nếu đã đăng nhập), nếu không sử dụng "cart_guest"
+  return currentUser ? `cart_${currentUser.email}` : "cart_guest";
+}
+
 function getCart() {
-  const cart = localStorage.getItem("cart");
-  return cart ? JSON.parse(cart) : [];
+  const cartKey = getCartKey();
+  const cartRaw = localStorage.getItem(cartKey);
+  try {
+    return cartRaw ? JSON.parse(cartRaw) : [];
+  } catch {
+    return [];
+  }
 }
 
-/**
- * Lưu giỏ hàng vào localStorage và cập nhật số lượng hiển thị
- * @param {Array} cart - mảng giỏ hàng
- */
 function saveCart(cart) {
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCartCount();
+  const cartKey = getCartKey();
+  localStorage.setItem(cartKey, JSON.stringify(cart));
+  updateCartCount(); // Cập nhật lại số lượng giỏ hàng
 }
 
-/**
- * Cập nhật số lượng sản phẩm trong giỏ hàng ở icon giỏ hàng
- */
 function updateCartCount() {
   const cartCountElem = document.getElementById("cart-count");
+  if (!cartCountElem) {
+    console.warn("Không tìm thấy element #cart-count");
+    return;
+  }
   const cart = getCart();
-  // Tổng số lượng tất cả sản phẩm
   const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   if (totalQuantity > 0) {
@@ -109,31 +150,38 @@ function updateCartCount() {
 }
 
 /**
- * Thêm sản phẩm vào giỏ hàng theo productId
- * Nếu sản phẩm đã tồn tại, tăng số lượng
- * @param {string} productId
+ * Thêm sản phẩm vào giỏ hàng
+ * Khi sản phẩm được thêm vào giỏ hàng, sẽ kiểm tra nếu sản phẩm có tùy chỉnh hay không
  */
 function addToCart(productId) {
   const cart = getCart();
-  const existingItem = cart.find((item) => item.id === productId);
+  const product = products
+    .flatMap((cat) => cat.list)
+    .find((p) => p.id === productId);
 
-  if (existingItem) {
-    existingItem.quantity++;
+  if (!product) return;
+
+  const existing = cart.find((i) => i.id === productId);
+  if (existing) {
+    existing.quantity++;
   } else {
-    cart.push({ id: productId, quantity: 1 });
+    // Nếu sản phẩm có tùy chỉnh, sẽ không lưu thông số kỹ thuật ở đây
+    cart.push({
+      id: productId,
+      quantity: 1,
+      specs: product.customizable ? {} : null,
+    });
   }
 
-  saveCart(cart);
+  saveCart(cart); // Lưu lại giỏ hàng và render lại giỏ hàng
   showAddNotification();
 }
 
 /**
- * Hiển thị thông báo nhỏ khi thêm sản phẩm vào giỏ hàng
- * @param {string} message - nội dung thông báo
+ * Hiển thị thông báo nhỏ dạng toast
  */
 function showAddNotification(message = "Đã thêm sản phẩm vào giỏ hàng") {
   let toastContainer = document.getElementById("toast-container");
-
   if (!toastContainer) {
     toastContainer = document.createElement("div");
     toastContainer.id = "toast-container";
@@ -143,71 +191,102 @@ function showAddNotification(message = "Đã thêm sản phẩm vào giỏ hàng
     toastContainer.style.zIndex = "1000";
     document.body.appendChild(toastContainer);
   }
-
   const toast = document.createElement("div");
   toast.className = "toast";
-  toast.style.background = "rgba(0, 0, 0, 0.7)";
+  toast.style.background = "rgba(0,0,0,0.7)";
   toast.style.color = "#fff";
   toast.style.padding = "12px 20px";
   toast.style.borderRadius = "8px";
   toast.style.marginTop = "10px";
-  toast.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.3)";
+  toast.style.boxShadow = "0 4px 12px rgba(0,0,0,0.3)";
   toast.style.fontSize = "14px";
   toast.textContent = message;
-
   toastContainer.appendChild(toast);
-
-  // Tự động ẩn thông báo sau 3 giây
-  setTimeout(() => {
-    toast.remove();
-  }, 3000);
+  setTimeout(() => toast.remove(), 3000);
 }
 
 /**
  * Tìm kiếm sản phẩm theo tên
- * Ẩn/hiện các card dựa trên kết quả tìm kiếm
  */
 function searchProducts() {
-  const input = document.getElementById("searchInput").value.toLowerCase();
-  const allCards = document.querySelectorAll(".product-card");
-
-  allCards.forEach((card) => {
-    const name = card.querySelector("h3").textContent.toLowerCase();
-    card.style.display = name.includes(input) ? "" : "none";
+  const input = document.getElementById("searchInput");
+  if (!input) {
+    console.warn("Không tìm thấy #searchInput");
+    return;
+  }
+  const text = input.value.toLowerCase();
+  const cards = document.querySelectorAll(".product-card");
+  cards.forEach((card) => {
+    const nameElem = card.querySelector("h3");
+    if (nameElem) {
+      const nm = nameElem.textContent.toLowerCase();
+      card.style.display = nm.includes(text) ? "" : "none";
+    }
   });
 }
 
-// Gán sự kiện click cho nút tìm kiếm ở header
-document.querySelector(".search-btn").addEventListener("click", searchProducts);
+/**
+ * Gắn sự kiện cho nút tìm kiếm
+ */
+const btnSearch = document.querySelector(".search-btn");
+if (btnSearch) {
+  btnSearch.addEventListener("click", searchProducts);
+}
 
-// MAIN INIT: chạy khi DOM đã tải xong
+/**
+ * Kiểm tra đăng nhập khi nhấn vào giỏ hàng
+ */
+const cartLink = document.querySelector(".cart-link");
+if (cartLink) {
+  cartLink.addEventListener("click", (e) => {
+    const isLogin = localStorage.getItem("userLoggedIn") === "true";
+    if (!isLogin) {
+      e.preventDefault();
+      alert("Vui lòng đăng nhập để xem giỏ hàng");
+      window.location.href = "login.html";
+    }
+  });
+}
+
+/**
+ * Khi DOM loaded, tiến hành khởi tạo dữ liệu, render sản phẩm và cập nhật giỏ hàng
+ */
 document.addEventListener("DOMContentLoaded", () => {
-  initData();
-
-  // Hiển thị sản phẩm theo các danh mục
+  initData(); // Khởi tạo dữ liệu nếu chưa có
   renderProducts("Cà phê");
   renderProducts("Trà sữa");
   renderProducts("Matcha");
   renderProducts("Trà trái cây");
   renderProducts("Topping");
 
-  // Cập nhật số lượng giỏ hàng ở icon
-  updateCartCount();
+  updateCartCount(); // Cập nhật số lượng giỏ hàng khi tải trang
 
-  // Nút Đăng nhập/đăng xuất
+  const isLogin = localStorage.getItem("userLoggedIn") === "true";
+  const accountMenu = document.getElementById("account-menu");
+  const accountLink = document.getElementById("account-link");
 
-  const isLogin = localStorage.getItem("userLoggedIn");
-  if (isLogin === "true") {
-    document.getElementById("login-btn").textContent = "Đăng xuất";
-  } else {
-    document.getElementById("login-btn").textContent = "Đăng nhập";
-  }
-  document.getElementById("login-btn").addEventListener("click", () => {
-    if (isLogin === "true") {
-      window.location.reload();
-      localStorage.setItem("userLoggedIn", "false");
+  if (accountMenu && accountLink) {
+    if (isLogin) {
+      accountMenu.innerHTML = `
+        <div class="account-dropdown">
+          <a href="account.html" id="account-link">Tài khoản của tôi</a> |
+          <a href="#" id="logout-link">Đăng xuất</a>
+        </div>
+      `;
+      const logoutLink = document.getElementById("logout-link");
+      if (logoutLink) {
+        logoutLink.addEventListener("click", (e) => {
+          e.preventDefault();
+          localStorage.setItem("userLoggedIn", "false");
+          localStorage.removeItem("currentUser");
+          location.reload();
+        });
+      }
     } else {
-      window.location.href = "login.html";
+      accountLink.textContent = "Đăng nhập";
+      accountLink.href = "login.html";
     }
-  });
+  } else {
+    console.warn("Không tìm thấy account-menu hoặc account-link");
+  }
 });

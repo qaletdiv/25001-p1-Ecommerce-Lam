@@ -155,17 +155,6 @@
     <div id="cart-container"></div>
     <div id="toast-container"></div>
 
-    <!-- ✅ Kiểm tra đăng nhập trước khi tải cart.js -->
-    <script>
-      // Kiểm tra user hiện tại từ localStorage
-      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
-      if (!currentUser) {
-        // Chưa đăng nhập → chuyển hướng đến trang đăng nhập, kèm query để quay lại
-        window.location.href = "login.html?redirect=cart.html";
-      }
-    </script>
-
     <!-- ✅ Sau khi xác minh đăng nhập, mới load logic giỏ hàng -->
     <script type="module" src="./js/cart.js"></script>
   </body>

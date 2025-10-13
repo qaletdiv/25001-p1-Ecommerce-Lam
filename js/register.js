@@ -1,51 +1,36 @@
-// register.js
+// register.js - xử lý form đăng ký người dùng
 
-/**
- * Hàm đăng ký tài khoản mới
- * Kiểm tra các thông tin, lưu user vào localStorage
- */
-function register() {
-  const usernameInput = document.getElementById("username");
-  const passwordInput = document.getElementById("password");
-  const confirmInput = document.getElementById("confirmPassword");
+import { registerUser } from "./auth.js";
 
-  const username = usernameInput.value.trim().toLowerCase();
-  const password = passwordInput.value;
-  const confirmPassword = confirmInput.value;
+const registerForm = document.getElementById("register");
 
-  if (password !== confirmPassword) {
-    alert("Mật khẩu xác nhận không khớp.");
-    return;
-  }
-
-  // Lấy danh sách user hiện tại hoặc mảng rỗng
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-
-  // Kiểm tra username đã tồn tại chưa
-  const userExists = users.some((u) => u.username === username);
-  if (userExists) {
-    alert("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
-    return;
-  }
-
-  // Tạo user mới
-  const newUser = { username, password };
-
-  // Thêm user mới vào mảng
-  users.push(newUser);
-
-  // Lưu lại localStorage
-  localStorage.setItem("users", JSON.stringify(users));
-
-  alert("Đăng ký thành công! Bạn có thể đăng nhập ngay.");
-
-  // Chuyển sang trang login
-  window.location.href = "login.html";
-}
-
-// Lắng nghe submit form đăng ký
-const form = document.getElementById("register");
-form.addEventListener("submit", (e) => {
+registerForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  register();
+
+  // Lấy giá trị input, trim để loại bỏ khoảng trắng thừa
+  const fullName = registerForm.fullName.value.trim();
+  const username = registerForm.username.value.trim();
+  const email = registerForm.email.value.trim();
+  const password = registerForm.password.value;
+  const confirmPassword = registerForm.confirmPassword.value;
+
+  // Kiểm tra mật khẩu nhập lại có khớp không
+  if (password !== confirmPassword) {
+    alert("Mật khẩu không khớp!");
+    return;
+  }
+
+  // Tạo object user mới
+  const newUser = { fullName, username, email, password };
+
+  try {
+    // Gọi hàm đăng ký user
+    registerUser(newUser);
+    alert("Đăng ký thành công! Mời bạn đăng nhập.");
+    // Chuyển sang trang đăng nhập sau khi đăng ký thành công
+    window.location.href = "login.html";
+  } catch (error) {
+    // Nếu email đã tồn tại, thông báo lỗi
+    alert(error.message);
+  }
 });

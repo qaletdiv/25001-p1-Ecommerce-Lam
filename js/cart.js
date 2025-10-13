@@ -1,23 +1,43 @@
-import { products } from "./mock-data.js";
+import { products } from "./mock-data.js"; // Import danh sách sản phẩm từ file tĩnh
 
-// --- CHẶN TRUY CẬP KHI CHƯA ĐĂNG NHẬP ---
-if (localStorage.getItem("userLoggedIn") !== "true") {
-  localStorage.setItem("redirectAfterLogin", window.location.pathname);
-  alert("Vui lòng đăng nhập để truy cập giỏ hàng.");
-  window.location.href = "login.html";
+// === Xác định người dùng hiện tại ===
+const currentUserRaw = localStorage.getItem("currentUser");
+const currentUser = currentUserRaw ? JSON.parse(currentUserRaw) : null;
+
+// === Khởi tạo key lưu giỏ hàng ===
+const cartKey = currentUser ? `cart_${currentUser.email}` : "cart_guest";
+
+// === Mảng chứa dữ liệu giỏ hàng đã load từ localStorage ===
+let cart = [];
+
+/**
+ * Load giỏ hàng từ localStorage theo key tương ứng (user/guest)
+ */
+function loadCartFromLocalStorage() {
+  try {
+    cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+  } catch {
+    cart = [];
+  }
+
+  // Lọc các sản phẩm hợp lệ còn tồn tại trong mock-data
+  cart = cart.filter((item) => getProductById(item.id));
 }
 
-// Lấy cart từ localStorage hoặc mảng rỗng
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+/**
+ * Lưu giỏ hàng vào localStorage và cập nhật lại giao diện
+ */
+function updateCartAndRender() {
+  localStorage.setItem(cartKey, JSON.stringify(cart));
+  renderCart();
+  updateCartCount();
+}
 
-// Lọc sản phẩm còn tồn tại trong dữ liệu gốc
-cart = cart.filter((item) => getProductById(item.id));
-updateCartAndRender();
-
-// --- Hàm kiểm tra đăng nhập trước thao tác ---
+/**
+ * Kiểm tra đăng nhập trước khi cho phép thao tác
+ */
 function checkLogin() {
-  if (localStorage.getItem("userLoggedIn") !== "true") {
-    // Lưu trang hiện tại để chuyển về sau login
+  if (!currentUser) {
     localStorage.setItem(
       "redirectAfterLogin",
       window.location.pathname.split("/").pop()
@@ -29,7 +49,9 @@ function checkLogin() {
   return true;
 }
 
-// Lấy sản phẩm theo id từ mock-data
+/**
+ * Tìm sản phẩm theo ID từ danh sách `products`
+ */
 function getProductById(productId) {
   for (const category of products) {
     const found = category.list.find((p) => String(p.id) === String(productId));
@@ -38,15 +60,12 @@ function getProductById(productId) {
   return null;
 }
 
-// Lưu cart + render lại
-function updateCartAndRender() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
-}
-
-// Cập nhật số lượng
+/**
+ * Cập nhật số lượng sản phẩm
+ */
 function updateQuantity(productId, newQuantity, inputElement) {
-  if (!checkLogin()) return; // Bắt buộc đăng nhập trước cập nhật
+  if (!checkLogin()) return;
+
   const item = cart.find((item) => String(item.id) === String(productId));
   if (item) {
     if (newQuantity < 1 || isNaN(newQuantity)) {
@@ -60,35 +79,29 @@ function updateQuantity(productId, newQuantity, inputElement) {
   }
 }
 
-// Xóa sản phẩm khỏi giỏ
+/**
+ * Xóa sản phẩm khỏi giỏ hàng
+ */
 function removeItem(productId) {
-  if (!checkLogin()) return; // Bắt buộc đăng nhập trước xóa
-  const container = document.querySelector("#cart-container");
-  const itemDiv = container
-    .querySelector(`button[data-id="${productId}"]`)
-    ?.closest(".cart-item");
-  if (itemDiv) {
-    itemDiv.style.transition = "opacity 0.4s";
-    itemDiv.style.opacity = "0";
-    setTimeout(() => {
-      cart = cart.filter((item) => String(item.id) !== String(productId));
-      updateCartAndRender();
-      showToast("Đã xóa sản phẩm");
-    }, 400);
-  } else {
-    cart = cart.filter((item) => String(item.id) !== String(productId));
-    updateCartAndRender();
-    showToast("Đã xóa sản phẩm");
-  }
+  if (!checkLogin()) return;
+
+  cart = cart.filter((item) => String(item.id) !== String(productId));
+  updateCartAndRender();
+  showToast("Đã xóa sản phẩm");
 }
 
-// Render giỏ hàng
+/**
+ * Hiển thị giỏ hàng ra giao diện
+ */
 function renderCart() {
   const container = document.querySelector("#cart-container");
+  if (!container) return;
+
   container.innerHTML = "";
 
   if (cart.length === 0) {
     container.innerHTML = "<p>Giỏ hàng của bạn đang trống.</p>";
+    updateCartCount();
     return;
   }
 
@@ -101,6 +114,16 @@ function renderCart() {
     const itemTotal = product.price * item.quantity;
     total += itemTotal;
 
+    let specsHtml = "";
+    if (item.specs && Object.keys(item.specs).length > 0) {
+      specsHtml =
+        "<ul class='specs-list'>" +
+        Object.entries(item.specs)
+          .map(([key, value]) => `<li><strong>${key}:</strong> ${value}</li>`)
+          .join("") +
+        "</ul>";
+    }
+
     const div = document.createElement("div");
     div.className = "cart-item";
     div.innerHTML = `
@@ -111,6 +134,7 @@ function renderCart() {
           style: "currency",
           currency: "VND",
         })}</p>
+        ${specsHtml}
         <p>
           Số lượng: 
           <input type="number" min="1" value="${item.quantity}" data-id="${
@@ -127,6 +151,7 @@ function renderCart() {
     container.appendChild(div);
   });
 
+  // Tổng tiền
   const totalEl = document.createElement("h3");
   totalEl.textContent = `Tổng cộng: ${total.toLocaleString("vi-VN", {
     style: "currency",
@@ -134,7 +159,7 @@ function renderCart() {
   })}`;
   container.appendChild(totalEl);
 
-  // Tạo nút thanh toán nếu chưa có
+  // Nút thanh toán
   if (!document.getElementById("checkout-btn")) {
     const checkoutBtn = document.createElement("button");
     checkoutBtn.textContent = "Thanh toán";
@@ -143,7 +168,7 @@ function renderCart() {
       display: block;
       margin-left: auto;
       padding: 10px 20px;
-      background-color: #5d8e20;
+      background-color: #208e34ff;
       color: white;
       border: none;
       border-radius: 6px;
@@ -153,29 +178,57 @@ function renderCart() {
     `;
     container.appendChild(checkoutBtn);
 
+    // Điều hướng sang trang checkout.html khi nhấn nút thanh toán
     checkoutBtn.addEventListener("click", () => {
-      if (!checkLogin()) return; // Bắt buộc đăng nhập trước thanh toán
+      if (!checkLogin()) return;
       if (cart.length === 0) {
         alert("Giỏ hàng đang trống!");
         return;
       }
-      showCheckoutModal();
+      window.location.href = "checkout.html";
     });
   }
 
-  // Bắt sự kiện thay đổi số lượng
+  // Nút tiếp tục mua sắm
+  if (!document.getElementById("continue-shopping-btn")) {
+    const continueShoppingBtn = document.createElement("button");
+    continueShoppingBtn.textContent = "Tiếp tục mua sắm";
+    continueShoppingBtn.id = "continue-shopping-btn";
+    continueShoppingBtn.style = `
+      display: block;
+      margin-left: auto;
+      padding: 10px 20px;
+      background-color: #0a541aff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+    `;
+    container.appendChild(continueShoppingBtn);
+
+    // Điều hướng sang trang chủ khi nhấn nút tiếp tục mua sắm
+    continueShoppingBtn.addEventListener("click", () => {
+      window.location.href = "index.html"; // Quay lại trang chủ
+    });
+  }
+
+  // Sự kiện thay đổi số lượng
   container.querySelectorAll(".quantity-input").forEach((input) => {
     input.addEventListener("change", (e) => {
       const id = e.target.dataset.id;
       const newQty = parseInt(e.target.value, 10);
       updateQuantity(id, newQty, e.target);
     });
+
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") e.target.blur();
     });
   });
 
-  // Bắt sự kiện xóa sản phẩm
+  // Sự kiện xóa sản phẩm
   container.querySelectorAll(".remove-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       removeItem(btn.dataset.id);
@@ -183,119 +236,51 @@ function renderCart() {
   });
 }
 
-// Modal thanh toán
-function showCheckoutModal() {
-  if (document.getElementById("checkout-modal")) return;
+/**
+ * Hiển thị thông báo nhỏ dạng toast
+ */
+function showToast(message) {
+  const toastContainer = document.getElementById("toast-container");
+  if (!toastContainer) return;
 
-  // Thêm style cho modal
-  if (!document.getElementById("checkout-modal-style")) {
-    const style = document.createElement("style");
-    style.id = "checkout-modal-style";
-    style.textContent = `
-      #checkout-modal {
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0,0,0,0.6);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        overflow-y: auto;
-      }
-      #checkout-modal > div {
-        background: white;
-        padding: 30px 40px;
-        border-radius: 10px;
-        max-width: 400px;
-        width: 90%;
-        box-sizing: border-box;
-      }
-      #checkout-modal h2 {
-        margin-top: 0;
-        margin-bottom: 20px;
-        color: #116c08;
-      }
-      #checkout-modal label {
-        font-weight: 600;
-      }
-      #checkout-modal input[type="text"],
-      #checkout-modal input[type="tel"],
-      #checkout-modal textarea {
-        width: 100%;
-        padding: 8px 10px;
-        margin: 6px 0 15px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        box-sizing: border-box;
-        font-size: 14px;
-      }
-      #checkout-modal textarea {
-        resize: vertical;
-      }
-      #checkout-modal input[type="radio"] {
-        margin-right: 6px;
-      }
-      #checkout-modal button[type="submit"] {
-        background-color: #5d8e20;
-        color: white;
-        border: none;
-        padding: 10px 16px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 16px;
-        width: 100%;
-      }
-      #checkout-modal button[type="submit"]:hover {
-        background-color: #477415;
-      }
-      @media (max-width: 480px) {
-        #checkout-modal > div {
-          padding: 20px 15px;
-          max-width: 95%;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-  }
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = message;
+  toastContainer.appendChild(toast);
 
-  const modal = document.createElement("div");
-  modal.id = "checkout-modal";
-
-  const modalContent = document.createElement("div");
-
-  modalContent.innerHTML = `
-    <h2>Thanh toán đơn hàng</h2>
-    <form id="checkout-form">
-      <div><label>Họ và tên:</label><br /><input type="text" required /></div>
-      <div><label>Địa chỉ:</label><br /><textarea required></textarea></div>
-      <div><label>SĐT:</label><br /><input type="tel" pattern="[0-9]{9,12}" required /></div>
-      <div>
-        <label><input type="radio" name="payment" value="Tiền mặt" checked /> Tiền mặt</label><br />
-        <label><input type="radio" name="payment" value="Thẻ tín dụng" /> Thẻ tín dụng</label><br />
-        <label><input type="radio" name="payment" value="Ví điện tử" /> Ví điện tử</label>
-      </div>
-      <button type="submit">Xác nhận</button>
-    </form>
-  `;
-
-  modal.appendChild(modalContent);
-  document.body.appendChild(modal);
-
-  // Focus tự động vào input đầu tiên
-  modalContent.querySelector("input").focus();
-
-  // Đóng modal khi click ngoài
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) modal.remove();
-  });
-
-  // Xử lý submit form thanh toán
-  modal.querySelector("#checkout-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    localStorage.removeItem("cart");
-    cart = [];
-    modal.remove();
-    showToast("Thanh toán thành công!");
-    renderCart();
-  });
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
 }
+
+/**
+ * Cập nhật số lượng hiển thị trên icon giỏ hàng (nav)
+ */
+function updateCartCount() {
+  const countEl = document.getElementById("cart-count");
+  const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  if (countEl) {
+    if (totalQuantity > 0) {
+      countEl.style.display = "inline-block";
+      countEl.textContent = totalQuantity;
+    } else {
+      countEl.style.display = "none";
+    }
+  }
+}
+
+/**
+ * Hàm trả về giỏ hàng guest để dùng bên auth.js
+ */
+export function getGuestCart() {
+  try {
+    return JSON.parse(localStorage.getItem("cart_guest")) || [];
+  } catch {
+    return [];
+  }
+}
+
+// === Khởi tạo khi file được load ===
+loadCartFromLocalStorage();
+updateCartAndRender();
