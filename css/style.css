@@ -166,7 +166,7 @@ body {
 .search-bar .search-btn:hover {
   background-color: rgba(0, 0, 0, 0.05);
 }
-
+body 
 /* ======================== */
 /* DANH SÁCH SẢN PHẨM       */
 /* ======================== */
@@ -435,12 +435,6 @@ h3 {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-}
-
-.filter-bar {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
 }
 
 .pagination button.active {
@@ -786,6 +780,9 @@ footer {
 
 /* Nút tùy chỉnh trang xem chi tiết   */
 .detail-container {
+  padding-top: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
   display: flex;
   gap: 30px;
   margin-top: 20px;
@@ -901,112 +898,6 @@ footer {
 }
 
 /* Tài khoản của tôi */
-/* Reset margin và padding cho toàn bộ trang */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  padding: 20px;
-}
-
-h2 {
-  text-align: center;
-  color: #333;
-  margin-top: 20px;
-  font-size: 24px;
-}
-
-/* Thẻ thông tin tài khoản */
-#userInfo {
-  background-color: white;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#userInfo h3 {
-  font-size: 22px;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-#userInfo p {
-  font-size: 16px;
-  color: #555;
-}
-
-#orders-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.order-item {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.order-info {
-  margin-bottom: 10px;
-}
-
-.order-actions button {
-  background-color: #4caf50;
-  color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-.order-actions button:hover {
-  background-color: #45a049;
-}
-
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background-color: white;
-  padding: 30px;
-  border-radius: 10px;
-  width: 50%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.modal-header {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.close-btn {
-  font-size: 30px;
-  color: #aaa;
-  cursor: pointer;
-}
-
-.close-btn:hover {
-  color: #333;
-}
 
 /* Liên hệ */
 header h1 {
@@ -1032,6 +923,113 @@ header p {
   margin-bottom: 20px;
   font-size: 24px;
   color: #2c3e50;
+}
+/* Tiêu đề */
+h2 {
+  text-align: center;
+  color: #333;
+  margin-top: 20px;
+  font-size: 24px;
+}
+
+/* Thông tin người dùng */
+#userInfo {
+  max-width: 800px;
+  margin: 30px auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#userInfo h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+#userInfo p {
+  font-size: 16px;
+  color: #555;
+  margin: 5px 0;
+}
+
+/* Danh sách đơn hàng */
+#orders-list {
+  max-width: 800px;
+  margin: 0 auto 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-item {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.order-info p {
+  margin: 5px 0;
+}
+
+.order-actions {
+  margin-top: 10px;
+}
+
+.order-actions button {
+  background-color: #4caf50;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.order-actions button:hover {
+  background-color: #45a049;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.close-btn {
+  font-size: 30px;
+  color: #aaa;
+  float: right;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: #333;
 }
 
 .contact-form label {

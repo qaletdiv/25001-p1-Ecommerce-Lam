@@ -5,7 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chi tiết sản phẩm</title>
     <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .image-slider {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        margin-bottom: 15px;
+      }
+
+      .image-slider img {
+        height: 80px;
+        width: auto;
+        border-radius: 5px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: 0.2s;
+      }
+
+      .image-slider img:hover {
+        border: 2px solid #ff9800;
+      }
+
+      .main-image {
+        width: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-bottom: 10px;
+      }
+
+      .detail-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin-top: 30px;
+      }
+
+      .detail-image {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      .detail-info {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      #account-link.logout {
+        color: rgb(107, 162, 56);
+        font-weight: bold;
+        cursor: pointer;
+      }
+    </style>
   </head>
+
   <body>
     <header class="header-fixed">
       <div class="body-header main-content">
@@ -36,5 +89,26 @@
     </footer>
 
     <script type="module" src="js/product-detail.js"></script>
+
+    <script>
+      // ✅ Chuyển đổi nút đăng nhập → đăng xuất nếu người dùng đã login
+      const isLoggedIn = localStorage.getItem("userLoggedIn") === "true";
+      const accountLink = document.getElementById("account-link");
+
+      if (isLoggedIn) {
+        accountLink.textContent = "Đăng xuất";
+        accountLink.href = "#";
+        accountLink.classList.add("logout");
+
+        accountLink.addEventListener("click", function (e) {
+          e.preventDefault();
+          if (confirm("Bạn có chắc muốn đăng xuất không?")) {
+            localStorage.removeItem("userLoggedIn");
+            localStorage.removeItem("currentUser");
+            location.reload();
+          }
+        });
+      }
+    </script>
   </body>
 </html>

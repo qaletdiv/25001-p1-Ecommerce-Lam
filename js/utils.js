@@ -1,6 +1,6 @@
-// utils.js - Hàm dùng chung (format tiền, lấy param URL, check login, thao tác với localStorage)
+// utils.js (bạn đã gửi mình giữ nguyên)
 
-// Format tiền VND
+// Các hàm tiện ích dùng chung (format tiền, check login, thao tác localStorage)
 export function formatCurrencyVN(amount) {
   if (isNaN(amount)) return "0 ₫";
   return amount.toLocaleString("vi-VN", {
@@ -9,34 +9,36 @@ export function formatCurrencyVN(amount) {
   });
 }
 
-// Kiểm tra đăng nhập
 export function isLoggedIn() {
   return localStorage.getItem("userLoggedIn") === "true";
 }
 
-// Lấy user đang đăng nhập
 export function getCurrentUser() {
   try {
     const user = JSON.parse(localStorage.getItem("currentUser"));
     return user && typeof user === "object" ? user : null;
-  } catch (e) {
+  } catch {
     return null;
   }
 }
 
-// Lấy đơn hàng từ localStorage
 export function getOrdersFromLocalStorage(userEmail) {
+  if (!userEmail) return [];
   const key = `orders_${userEmail}`;
-  return JSON.parse(localStorage.getItem(key)) || [];
+  try {
+    const orders = JSON.parse(localStorage.getItem(key));
+    return Array.isArray(orders) ? orders : [];
+  } catch {
+    return [];
+  }
 }
 
-// Lưu đơn hàng vào localStorage
 export function saveOrdersToLocalStorage(userEmail, orders) {
+  if (!userEmail || !Array.isArray(orders)) return;
   const key = `orders_${userEmail}`;
   localStorage.setItem(key, JSON.stringify(orders));
 }
 
-// Format ngày giờ
 export function formatDateTime(dateString) {
   if (!dateString) return "Không rõ";
   const d = new Date(dateString);
@@ -50,38 +52,51 @@ export function formatDateTime(dateString) {
   });
 }
 
-// Render các sản phẩm trong đơn hàng
 export function renderOrderItems(items = []) {
   return items
     .map((item) => {
       const name = item.name ?? "Không rõ";
+      const specs = item.specs ? ` (${item.specs})` : "";
+      const toppings =
+        item.toppings?.length > 0
+          ? `<br><small>Topping: ${item.toppings.join(", ")}</small>`
+          : "";
       const price = item.price ?? 0;
+      const toppingPrice = item.toppingPrice ?? 0;
       const quantity = item.quantity ?? 1;
-      const total = price * quantity;
+      const total = (price + toppingPrice) * quantity;
+
       return `
         <li>
-          <strong>${name}</strong> – Số lượng: ${quantity} – Đơn giá: ${formatCurrencyVN(
-        price
+          <strong>${name}${specs}</strong> – Số lượng: ${quantity} – Đơn giá: ${formatCurrencyVN(
+        price + toppingPrice
       )} – Thành tiền: ${formatCurrencyVN(total)}
+          ${toppings}
         </li>
       `;
     })
     .join("");
 }
 
-// Hàm tạo nội dung hóa đơn (cùng mẫu cho cả xem chi tiết và in hóa đơn)
 export function generateInvoiceHtml(order, user) {
   const itemsHtml = (order.items || [])
     .map((item) => {
       const name = item.name ?? "Không rõ";
+      const specs = item.specs ? ` (${item.specs})` : "";
+      const toppings =
+        item.toppings?.length > 0
+          ? `<br><small>Topping: ${item.toppings.join(", ")}</small>`
+          : "";
       const price = item.price ?? 0;
+      const toppingPrice = item.toppingPrice ?? 0;
       const quantity = item.quantity ?? 1;
-      const total = price * quantity;
+      const total = (price + toppingPrice) * quantity;
+
       return `
         <tr>
-          <td>${name}</td>
+          <td>${name}${specs}${toppings}</td>
           <td>${quantity}</td>
-          <td>${formatCurrencyVN(price)}</td>
+          <td>${formatCurrencyVN(price + toppingPrice)}</td>
           <td>${formatCurrencyVN(total)}</td>
         </tr>
       `;

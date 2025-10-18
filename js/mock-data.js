@@ -10,6 +10,10 @@ const products = [
     list: [
       {
         id: "caphe-01",
+        images: [
+          "https://bna.1cdn.vn/2025/08/04/gia-ca-phe-hom-nay-5-8-2025.jpg",
+          "https://resource.kinhtedothi.vn/resources2025/1/users/58/gia-ca-phe-hom-nay-23-5-2025-1747949744.jpg",
+        ],
         img: "https://thuytinhocean.com/wp-content/uploads/2024/08/hinh-anh-ly-cafe-den-da-23.jpg",
         name: "Đen đá",
         price: 30000,
@@ -20,6 +24,10 @@ const products = [
       },
       {
         id: "caphe-02",
+        images: [
+          "https://virotacafe.com/wp-content/uploads/2025/08/vietnamese-coffee.webp",
+          "https://dayphache.edu.vn/wp-content/uploads/2019/10/bac-xiu-da.jpg",
+        ],
         img: "https://winci.com.vn/wp-content/uploads/2023/12/Cach-pha-ca-phe-bac-xiu-cho-nguoi-moi-bat-dau.jpg",
         name: "Bạc xỉu truyền thống",
         price: 30000,
@@ -31,6 +39,10 @@ const products = [
       },
       {
         id: "caphe-03",
+        images: [
+          "https://bazanland.com/wp-content/uploads/2020/04/hat-hanh-nhan-tai-bazanland.jpg",
+          "https://giadungducsaigon.vn/wp-content/uploads/2022/12/cach-tron-cac-loai-ca-phe-voi-nhau-1-800x524.jpg  ",
+        ],
         img: "https://simexcodl.com.vn/wp-content/uploads/2024/02/cach-pha-cafe-hanh-nhan-8.jpg",
         name: "Bạc xỉu hạnh nhân",
         price: 30000,
@@ -42,6 +54,10 @@ const products = [
       },
       {
         id: "caphe-04",
+        images: [
+          "https://simexcodl.com.vn/wp-content/uploads/2024/01/cach-pha-ca-phe-bot-bien-3.jpg",
+          "https://www.cubes-asia.com/storage/blogs/2024-11/cach-lam-ca-phe-bot-bien-dalgona-hot-trend-don.jpg",
+        ],
         img: "https://file.hstatic.net/200000079049/article/ban_sao_cach-lam-cafe-bot-bien-4.1_c76abbc31e144a91aabf17656c147fdc.png",
         name: "Cà phê bọt biển",
         price: 35000,
@@ -53,6 +69,10 @@ const products = [
       },
       {
         id: "caphe-05",
+        images: [
+          "https://vinbarista.com/uploads/news/cach-lam-ca-phe-cold-brew-dung-chuan-tai-nha-202409201539.jpeg",
+          "https://cdnv2.tgdd.vn/mwg-static/common/Common/cold-brew-cam-thumb-lon.jpg",
+        ],
         img: "https://athome.starbucks.com/sites/default/files/styles/ingredients_864x864/public/2022-12/22_SBX_COLD%20INNOVATIONS_CAH_COLD%20BREW%20CONCENTRATE_INGREDIENT.jpg.webp?itok=0MNIQrxj",
         name: "Cold brew",
         price: 38000,
@@ -69,6 +89,10 @@ const products = [
     list: [
       {
         id: "trasua-01",
+        images: [
+          "https://chehaodat.com.vn/wp-content/uploads/2024/06/1-12.png",
+          "https://file.hstatic.net/1000075078/file/teaholic_1x1_27c0cac1f2754ca59faeabb06e37661b_grande.jpg",
+        ],
         img: "https://phela.vn/wp-content/uploads/2021/07/14369.jpg",
         name: "O long đậm vị",
         price: 28000,
@@ -79,6 +103,10 @@ const products = [
       },
       {
         id: "trasua-02",
+        images: [
+          "https://bizweb.dktcdn.net/100/178/532/files/mot-lan-ghe-tham-doi-che-tan-cuong-thai-nguyen.jpg?v=1491810496113",
+          "https://bizweb.dktcdn.net/100/290/576/files/tragaorang-dd49374d-6277-44a3-835a-e64ba90e386d.jpg?v=1623296499302",
+        ],
         img: "https://glofood.vn/upload/baiviet/7dab210981b359ed00a21-2971.jpg",
         name: "O long gạo rang",
         price: 28000,
@@ -90,6 +118,10 @@ const products = [
       },
       {
         id: "trasua-03",
+        images: [
+          "https://tapdoanvinasa.com/wp-content/uploads/2022/04/moc-chau-thanh-xuan8.jpeg",
+          "https://luyutea.vn/wp-content/uploads/2023/08/hong-tra.jpg",
+        ],
         img: "https://bizweb.dktcdn.net/100/421/036/files/cach-nau-tra-sua-truyen-thong-de-ban-2.jpg?v=1616644748197",
         name: "Trà sữa Truyền thống",
         price: 25000,
@@ -100,6 +132,10 @@ const products = [
       },
       {
         id: "trasua-04",
+        images: [
+          "https://bizweb.dktcdn.net/100/290/576/files/utra.jpg?v=1620963298888",
+          "https://cdn.tgdd.vn/2021/11/CookRecipe/CookTipsNote/tra-earl-grey-la-gi-cong-dung-cua-tra-earl-grey-n-tipsnote-800x500.jpg",
+        ],
         img: "https://phela.vn/wp-content/uploads/2023/11/PHONG-LAN-scaled.jpg",
         name: "Trà sữa Bá tước",
         price: 28000,
@@ -110,6 +146,10 @@ const products = [
       },
       {
         id: "trasua-05",
+        images: [
+          "https://thanhnien.mediacdn.vn/Uploaded/2014/saigonamthuc.thanhnien.com.vn/Pictures20138/Tan_Nhan/tra_o_long.jpg",
+          "https://luyutea.vn/wp-content/uploads/2023/04/cach-u-tra-min-7.jpg",
+        ],
         img: "https://phela.vn/wp-content/uploads/2021/07/14287.jpg",
         name: "O long nhài sữa",
         price: 28000,
@@ -121,6 +161,10 @@ const products = [
       },
       {
         id: "trasua-06",
+        images: [
+          "https://cdn-i2.congthuong.vn/stores/news_dataimages/2023/092023/24/15/in_article/khoai-mon20230924150703.jpg?rt=20230924150704",
+          "https://www.hoptrisummit.com/media/k2/items/cache/7ced67c0d648122bcae10129de981341_XL.jpg",
+        ],
         img: "https://cherryngoc.vn/wp-content/uploads/2024/07/cach-nau-tra-sua-khoai-mon-3.jpg",
         name: "Trà sữa Ta-go",
         price: 28000,
@@ -136,6 +180,10 @@ const products = [
     list: [
       {
         id: "matcha-01",
+        images: [
+          "https://bizweb.dktcdn.net/100/178/532/files/mot-lan-ghe-tham-doi-che-tan-cuong-thai-nguyen.jpg?v=1491810496113",
+          "https://cdn.eva.vn/upload/2-2024/images/2024-04-10/matcha-len-ngoi-khi-he-den-huong-dan-cach-pha-matcha-chuan-nhat-tai-nha-3-1712761173-147-width780height585.jpg",
+        ],
         img: "https://recipesblob.oetker.de/assets/a106928ad58e4c56bb072edce6ed87af/750x750/iced-vanilla-matcha.webp",
         name: "Matcha latte",
         price: 35000,
@@ -146,6 +194,10 @@ const products = [
       },
       {
         id: "matcha-02",
+        images: [
+          "https://www.news-medical.net/images/news/ImageForNews_789253_17253215862635159.jpg",
+          "https://cdn.eva.vn/upload/1-2020/images/2020-01-09/1578585030-122-thumbnail.jpg",
+        ],
         img: "https://product.hstatic.net/1000075078/product/1745246651_matcha-dao_8c749d752e0d4d2b85f0a03310bd1379_large.png",
         name: "Matcha bưởi hồng",
         price: 35000,
@@ -156,6 +208,10 @@ const products = [
       },
       {
         id: "matcha-03",
+        images: [
+          "https://viotvietnam.vn/wp-content/uploads/2025/04/Dua-tuoi.png",
+          "https://media.vneconomy.vn/images/upload//2025/07/16/ceremonial-grade-matcha-powder.jpg",
+        ],
         img: "https://cdn.tgdd.vn/Files/2024/03/26/1563635/cach-lam-nuoc-dua-matcha-la-mieng-thu-mot-lan-la-nghien-ngay-202403261039460072.jpg",
         name: "Matcha and coco",
         price: 35000,
@@ -167,6 +223,10 @@ const products = [
       },
       {
         id: "matcha-04",
+        images: [
+          "https://suckhoedoisong.qltns.mediacdn.vn/324455921873985536/2023/12/26/nuoc-cot-dua-17035792765051023801860.jpg",
+          "https://cdn.loveandlemons.com/wp-content/uploads/2014/03/IMG_0147.jpg",
+        ],
         img: "https://xachtaynhat.net/wp-content/uploads/2019/08/Matcha-latte.jpg",
         name: "Matcha sữa dừa",
         price: 35000,
@@ -177,6 +237,10 @@ const products = [
       },
       {
         id: "matcha-05",
+        images: [
+          "https://www.keepingthepeas.com/wp-content/uploads/2022/03/dalgona-matcha-13.jpg",
+          "https://assets.nourishingmeals.com/sites/default/files/styles/content_cropped/public/media/ANTI-INFLAMMATORY%20MATCHA%20LATTE-2.jpg?h=14f4fae9",
+        ],
         img: "https://takestwoeggs.com/wp-content/uploads/2021/04/matcha-dalgona-takes-two-eggs-asian-fusion-feature-image.jpg",
         name: "Matcha bọt tuyết",
         price: 35000,
@@ -193,17 +257,25 @@ const products = [
     list: [
       {
         id: "tratraicay-01",
+        images: [
+          "https://bizweb.dktcdn.net/thumb/1024x1024/100/447/072/products/r-23.jpg?v=1684394480953",
+          "https://product.hstatic.net/200000423303/product/sa-huu-co_c7839288648d4aacb28d7c798194fdbd_grande.jpg",
+        ],
         img: "https://coffee.vntheme.com/wp-content/uploads/2022/09/TRA-DAO-CAM-SA.png",
-        name: "Đào cam xả",
+        name: "Đào cam sả",
         price: 25000,
         description:
-          "Hương vị đào ngọt nhẹ, kết hợp cam tươi mọng nước và xả thơm mát – tươi mới và dễ chịu.",
+          "Hương vị đào ngọt nhẹ, kết hợp cam tươi mọng nước và sả thơm mát – tươi mới và dễ chịu.",
         specs: defaultSpecs,
         isFeatured: true,
         customizable: true,
       },
       {
         id: "tratraicay-02",
+        images: [
+          "https://quantra.vn/wp-content/uploads/2025/02/hibiscus.jpg",
+          "https://cdn.tgdd.vn/Files/2021/07/21/1369651/1-qua-buoi-bao-nhieu-calo-an-buoi-co-map-khong-202107210209120055.jpg",
+        ],
         img: "https://goldenfarm.com.vn/wp-content/uploads/dao-nhai-hibicus-1.webp",
         name: "Hibiscus mix bưởi",
         price: 25000,
@@ -215,6 +287,10 @@ const products = [
       },
       {
         id: "tratraicay-03",
+        images: [
+          "https://suckhoedoisong.qltns.mediacdn.vn/324455921873985536/2023/12/4/photo-1701677489776-17016774899731079149086.jpg",
+          "https://i0.wp.com/loctancuong.com/wp-content/uploads/2024/01/110407-tra-olong.jpg?ssl=1",
+        ],
         img: "https://sieuthinguyenlieu.com/assets/uploads/images/Tj4rJIR4XuMZ_o-long-sen-vang-la-dua-web.jpg",
         name: "Trà thư giãn",
         price: 25000,
@@ -226,6 +302,10 @@ const products = [
       },
       {
         id: "tratraicay-04",
+        images: [
+          "https://www.kikkoman.com/en/cookbook/assets/img/GlossaryYuzu.jpg",
+          "https://cdn.tgdd.vn/Files/2022/04/27/1428735/tim-hieu-ve-vai-thieu-phan-loai-tac-dung-bao-nhieu-calo-202204271002528683.jpg",
+        ],
         img: "https://glofood.vn/upload/images/TRA%20VAI%20HOA%20HONG(2).png",
         name: "Yu-zu vải",
         price: 30000,
@@ -237,6 +317,10 @@ const products = [
       },
       {
         id: "tratraicay-05",
+        images: [
+          "https://bizweb.dktcdn.net/100/421/036/files/hong-tra-dac-biet-royal-2.jpg?v=1639536102074",
+          "https://binhdienonline.com/thumbs_size/product/2021_04/tac/[550x550-cr]tac-38.jpg",
+        ],
         img: "https://www.huongnghiepaau.com/wp-content/uploads/2022/08/hong-tra-tac-co-vi-chua-ngot.jpg",
         name: "Hồng trà tuổi thơ",
         price: 15000,
